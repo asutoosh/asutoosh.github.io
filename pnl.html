@@ -8,13 +8,11 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>📈</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* same design tokens as your main page */
     :root{
       --bg:#0b0c10; --panel:#111218; --text:#e6eaf0; --muted:#a9b1c3;
       --brand:#66e3ff; --brand-2:#ae7bff; --ring: color-mix(in oklch, var(--brand), white 20%);
       --border: color-mix(in oklch, var(--text), black 85%); --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius:14px; --gap:clamp(16px, 2.2vw, 28px); --maxw:1100px;
-      --h1:clamp(40px,6vw,64px);
+      --radius:14px; --gap:clamp(16px, 2.2vw, 28px); --maxw:1100px; --h1:clamp(40px,6vw,64px);
     }
     :root.light{
       --bg:#f6f7fb; --panel:#ffffff; --text:#0f172a; --muted:#475569;
@@ -35,7 +33,6 @@
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:14px}
     .btn{border:1px solid var(--border); background:var(--panel); color:var(--text);
       padding:.56rem .9rem; border-radius:12px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:var(--shadow)}
-    .btn.primary{background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#fff; border:none}
     .panel{background:linear-gradient(180deg, color-mix(in oklch, var(--panel), transparent 15%), var(--panel));
       border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow)}
     h1{font-size:var(--h1); line-height:1.05; letter-spacing:-.02em}
@@ -45,6 +42,8 @@
     .grid-2{grid-template-columns:2fr 1fr} @media (max-width:900px){ .grid-2{grid-template-columns:1fr} }
     .card{padding:18px}
     .stat{font-size:28px; font-weight:800}
+    .controls{display:flex; align-items:center; gap:12px; margin-top:10px}
+    .select{border:1px solid var(--border); background:var(--panel); color:var(--text); border-radius:10px; padding:.5rem .7rem}
     :focus-visible{outline:2px solid var(--ring); outline-offset:2px; border-radius:8px}
   </style>
 </head>
@@ -62,10 +61,27 @@
     <h1>Daily PnL & Total Value</h1>
     <p class="muted">Auto-updated from Google Sheets at 5:30 AM IST</p>
 
+    <div class="controls">
+      <label for="rangeSelect" class="muted">Range:</label>
+      <select id="rangeSelect" class="select" aria-label="Time range">
+        <option value="7" selected>Last 7 days</option>
+        <option value="30">Last 1 month</option>
+      </select>
+      <a class="btn" id="openRaw" href="#" target="_blank" rel="noopener">Open Raw JSON</a>
+    </div>
+
     <div class="grid grid-2" style="margin-top:16px">
-      <div class="panel card">
-        <canvas id="chart" height="140" aria-label="PnL chart" role="img"></canvas>
+      <div class="grid" style="align-content:start">
+        <div class="panel card">
+          <h2 style="margin-bottom:8px">Asset Value (Total)</h2>
+          <canvas id="chartTotal" height="140" aria-label="Total Value chart" role="img"></canvas>
+        </div>
+        <div class="panel card">
+          <h2 style="margin-bottom:8px">Daily PnL</h2>
+          <canvas id="chartPnl" height="140" aria-label="Daily PnL chart" role="img"></canvas>
+        </div>
       </div>
+
       <div class="panel card">
         <div class="stat" id="latestTotal">—</div>
         <div class="muted">Latest Total Value</div>
@@ -74,118 +90,129 @@
         <div class="muted">Latest Daily PnL</div>
         <div style="height:12px"></div>
         <div class="muted" id="updatedAt">Updated: —</div>
-        <div style="height:16px"></div>
-        <a class="btn" id="openRaw" href="#" target="_blank" rel="noopener">Open Raw JSON</a>
       </div>
     </div>
   </main>
-  
+
   <script>
-  // ====== SET YOUR /exec URL ======
-  const API_URL = 'https://script.google.com/macros/s/AKfycbxvLrTsuDrN-hLpRC064ono14txRwsqpotV96FD0X0n0ZdhJhlk3UvZFV0racA0MAd5/exec';
+    // ====== SET YOUR /exec URL ======
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxvLrTsuDrN-hLpRC064ono14txRwsqpotV96FD0X0n0ZdhJhlk3UvZFV0racA0MAd5/exec';
 
-  // theme toggle (same as index)
-  (function(){
-    const root = document.documentElement;
-    const toggle = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('theme');
-    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-    function setTheme(mode){
-      if(mode === 'light'){ root.classList.add('light'); toggle.setAttribute('aria-checked','false'); toggle.querySelector('.label').textContent='Light'; }
-      else { root.classList.remove('light'); toggle.setAttribute('aria-checked','true'); toggle.querySelector('.label').textContent='Dark'; }
-      localStorage.setItem('theme', mode);
-    }
-    setTheme(saved ?? (prefersLight ? 'light' : 'dark'));
-    toggle.addEventListener('click', ()=> setTheme(root.classList.contains('light') ? 'dark' : 'light'));
-  })();
-
-  // ✨ Currency formatter (USD)
-const LOCALE = 'en-US';
-const CURRENCY = 'USD';
-function fmt(n){
-  return new Intl.NumberFormat(LOCALE, { style:'currency', currency:CURRENCY, maximumFractionDigits: 2 }).format(n);
-}
-
-
-  // Parse "19 Aug" -> Date(currentYear, 7, 19)
-  function parseDM(str){
-    if(!str) return new Date(0);
-    const [d, mon] = String(str).trim().split(/\s+/);
-    const map = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-    const m = map[mon];
-    const y = new Date().getFullYear();
-    return (m == null) ? new Date(0) : new Date(y, m, parseInt(d,10));
-  }
-
-  async function loadData(){
-    const res = await fetch(API_URL + '?ts=' + Date.now(), { cache: 'no-store' });
-    if(!res.ok) throw new Error('Failed to fetch: ' + res.status);
-    const json = await res.json();
-
-    // keep only rows up to today and drop future zero-rows
-    const today = new Date();
-    const items = (json.items || [])
-      .map(it => ({ ...it, _d: parseDM(it.date) }))
-      .filter(it => it._d <= today)                  // don't show future dates
-      .filter(it => (it.total !== 0 || it.pnl !== 0))// remove blank zero rows
-      .sort((a,b) => a._d - b._d);                   // sort by real date
-
-    return items;
-  }
-
-  function render(items){
-    if(!items.length){
-      alert('No data to display yet.');
-      return;
-    }
-    const labels = items.map(i => i.date);
-    const totals = items.map(i => i.total);
-    const pnls   = items.map(i => i.pnl);
-    const last   = items[items.length - 1];
-
-    document.getElementById('latestTotal').textContent = fmt(last.total);
-    document.getElementById('latestPnl').textContent   = (last.pnl >= 0 ? '+' : '') + fmt(last.pnl);
-    document.getElementById('updatedAt').textContent   = 'Updated: ' + new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-    document.getElementById('openRaw').href = API_URL + '?ts=' + Date.now();
-
-    const ctx = document.getElementById('chart');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          { label: 'Total Value', data: totals, yAxisID: 'y1', tension: 0.25 },
-          { label: 'Daily PnL',   data: pnls,   yAxisID: 'y2', tension: 0.25 }
-        ]
-      },
-      options: {
-        responsive: true,
-        interaction: { mode: 'index', intersect: false },
-        scales: {
-          y1: { type: 'linear', position: 'left',  ticks: { callback: v => fmt(v) } },
-          y2: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, ticks: { callback: v => fmt(v) } },
-          x:  { ticks: { maxRotation: 0 } }
-        },
-        plugins: {
-          legend: { position: 'top' },
-          tooltip: { callbacks: {
-            label: c => c.dataset.label + ': ' + fmt(c.parsed.y)
-          } }
-        }
+    // ====== THEME TOGGLE ======
+    (function(){
+      const root = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('theme');
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      function setTheme(mode){
+        if(mode === 'light'){ root.classList.add('light'); toggle.setAttribute('aria-checked','false'); toggle.querySelector('.label').textContent='Light'; }
+        else { root.classList.remove('light'); toggle.setAttribute('aria-checked','true'); toggle.querySelector('.label').textContent='Dark'; }
+        localStorage.setItem('theme', mode);
       }
-    });
-  }
+      setTheme(saved ?? (prefersLight ? 'light' : 'dark'));
+      toggle.addEventListener('click', ()=> setTheme(root.classList.contains('light') ? 'dark' : 'light'));
+    })();
 
-  (async function init(){
-    try{
-      const items = await loadData();
-      render(items);
-    }catch(e){
-      alert('Could not load data. Check API URL/permissions.');
-      console.error(e);
+    // ====== USD formatter ======
+    const LOCALE = 'en-US';
+    const CURRENCY = 'USD';
+    function fmt(n){ return new Intl.NumberFormat(LOCALE, { style:'currency', currency:CURRENCY, maximumFractionDigits: 2 }).format(n); }
+
+    // ====== date helpers ======
+    function parseDM(str){
+      if(!str) return new Date(0);
+      const [d, mon] = String(str).trim().split(/\s+/);
+      const map = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+      const m = map[mon];
+      const y = new Date().getFullYear();
+      return (m == null) ? new Date(0) : new Date(y, m, parseInt(d,10));
     }
-  })();
-</script>
+    function filterByDays(items, days){
+      const today = new Date(); today.setHours(0,0,0,0);
+      const cutoff = new Date(today); cutoff.setDate(today.getDate() - (days - 1));
+      return items.filter(it => it._d >= cutoff && it._d <= today);
+    }
 
+    // ====== data fetch & prep ======
+    async function fetchItems(){
+      const res = await fetch(API_URL + '?ts=' + Date.now(), { cache:'no-store' });
+      if(!res.ok) throw new Error('Failed to fetch: ' + res.status);
+      const json = await res.json();
+      const today = new Date(); today.setHours(0,0,0,0);
+      return (json.items || [])
+        .map(it => ({ ...it, _d: parseDM(it.date) }))
+        .filter(it => it._d <= today)              // no future rows
+        .sort((a,b) => a._d - b._d);               // ascending
+    }
+
+    // ====== charts ======
+    let chartTotal = null;
+    let chartPnl = null;
+    function ensureCharts(){
+      if(!chartTotal){
+        chartTotal = new Chart(document.getElementById('chartTotal'), {
+          type: 'line',
+          data: { labels: [], datasets: [{ label: 'Total Value', data: [], tension: 0.25 }] },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
+            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
+          }
+        });
+      }
+      if(!chartPnl){
+        chartPnl = new Chart(document.getElementById('chartPnl'), {
+          type: 'bar',
+          data: { labels: [], datasets: [{ label: 'Daily PnL', data: [] }] },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
+            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
+          }
+        });
+      }
+    }
+    function updateCharts(items){
+      ensureCharts();
+      const labels = items.map(i => i.date);
+      const totals = items.map(i => i.total);
+      const pnls   = items.map(i => i.pnl);
+
+      chartTotal.data.labels = labels;
+      chartTotal.data.datasets[0].data = totals;
+      chartTotal.update();
+
+      chartPnl.data.labels = labels;
+      chartPnl.data.datasets[0].data = pnls;
+      chartPnl.update();
+
+      const last = items[items.length - 1];
+      document.getElementById('latestTotal').textContent = fmt(last.total);
+      document.getElementById('latestPnl').textContent   = (last.pnl >= 0 ? '+' : '') + fmt(last.pnl);
+      document.getElementById('updatedAt').textContent   = 'Updated: ' + new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    }
+
+    // ====== init & range handling ======
+    (async function init(){
+      try{
+        const allItems = await fetchItems();
+        document.getElementById('openRaw').href = API_URL + '?ts=' + Date.now();
+
+        const select = document.getElementById('rangeSelect');
+        function applyRange(){
+          const days = Number(select.value) || 7;           // 7 or 30
+          const items = filterByDays(allItems, days);
+          updateCharts(items.length ? items : allItems.slice(-days)); // fallback: last N rows
+        }
+        select.addEventListener('change', applyRange);
+        applyRange(); // default (7 days)
+      }catch(e){
+        alert('Could not load data. Check API URL/permissions.');
+        console.error(e);
+      }
+    })();
+  </script>
 </body>
 </html>

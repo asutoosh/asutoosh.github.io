@@ -3,45 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Asutoosh.me</title>
+  <title>Asutoosh | Portfolio</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1d3557, #457b9d);
-      color: #f1faee;
+      line-height: 1.6;
+      background: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background: #1d3557;
+      color: #fff;
+      padding: 20px 0;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      height: 100vh;
     }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 0.5em;
+    nav a {
+      color: #fff;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
     }
-    p {
-      font-size: 1.2em;
+    nav a:hover {
+      text-decoration: underline;
     }
-    a {
+    section {
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #1d3557;
+    }
+    .btn {
       display: inline-block;
+      padding: 10px 20px;
       margin-top: 20px;
-      padding: 12px 24px;
       background: #e63946;
       color: #fff;
       text-decoration: none;
-      border-radius: 6px;
+      border-radius: 5px;
       transition: background 0.3s;
     }
-    a:hover {
+    .btn:hover {
       background: #d62839;
+    }
+    footer {
+      background: #1d3557;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-  <h1>🚀 Welcome to Asutoosh.me</h1>
-  <p>This site is powered by <strong>GitHub Pages</strong> and secured with <strong>HTTPS</strong>.</p>
-  <a href="https://github.com/asutoosh">Visit My GitHub</a>
+
+  <header>
+    <h1>👋 Hi, I'm Asutoosh</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>Welcome to my website! I'm a student and developer interested in web, open-source, and cool projects. This site is hosted on GitHub Pages and secured with HTTPS.</p>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <p>Here are some things I’ve worked on:</p>
+    <ul>
+      <li>🚀 Project 1 – My cool app</li>
+      <li>💻 Project 2 – Another fun project</li>
+      <li>🌐 Project 3 – Something live on the web</li>
+    </ul>
+    <a class="btn" href="https://github.com/asutoosh" target="_blank">View My GitHub</a>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>You can reach me at:</p>
+    <p><a href="mailto:your@email.com">your@email.com</a></p>
+  </section>
+
+  <footer>
+    <p>© 2025 Asutoosh | Built with ❤️ and GitHub Pages</p>
+  </footer>
+
 </body>
 </html>

@@ -13,9 +13,13 @@
       --brand:#66e3ff; --brand-2:#ae7bff; --ring: color-mix(in oklch, var(--brand), white 20%);
       --border: color-mix(in oklch, var(--text), black 85%); --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:14px; --gap:clamp(16px, 2.2vw, 28px); --maxw:1100px; --h1:clamp(40px,6vw,64px);
-      --pos:#22c55e; --neg:#ef4444;
+      --pos:#22c55e; /* profit green */ --neg:#ef4444; /* loss red */
     }
-    :root.light{ --bg:#f6f7fb; --panel:#ffffff; --text:#0f172a; --muted:#475569; --brand:#2563eb; --brand-2:#9333ea; --border: color-mix(in oklch, var(--text), white 80%); --shadow: 0 10px 30px rgba(0,0,0,.1) }
+    :root.light{
+      --bg:#f6f7fb; --panel:#ffffff; --text:#0f172a; --muted:#475569;
+      --brand:#2563eb; --brand-2:#9333ea; --border: color-mix(in oklch, var(--text), white 80%);
+      --shadow: 0 10px 30px rgba(0,0,0,.1);
+    }
     *,*::before,*::after{box-sizing:border-box} *{margin:0}
     body{
       min-height:100vh; background:
@@ -25,10 +29,13 @@
       color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     }
     .container{width:min(100% - 2*var(--gap), var(--maxw)); margin-inline:auto}
-    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(120%) blur(10px); background: color-mix(in oklch, var(--bg) 85%, transparent); border-bottom:1px solid var(--border)}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(120%) blur(10px);
+      background: color-mix(in oklch, var(--bg) 85%, transparent); border-bottom:1px solid var(--border)}
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:14px}
-    .btn{border:1px solid var(--border); background:var(--panel); color:var(--text); padding:.56rem .9rem; border-radius:12px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:var(--shadow)}
-    .panel{background:linear-gradient(180deg, color-mix(in oklch, var(--panel), transparent 15%), var(--panel)); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow)}
+    .btn{border:1px solid var(--border); background:var(--panel); color:var(--text);
+      padding:.56rem .9rem; border-radius:12px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:var(--shadow)}
+    .panel{background:linear-gradient(180deg, color-mix(in oklch, var(--panel), transparent 15%), var(--panel));
+      border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow)}
     h1{font-size:var(--h1); line-height:1.05; letter-spacing:-.02em}
     .muted{color:var(--muted)}
     main{padding-block: clamp(32px, 6vw, 64px)}
@@ -107,7 +114,6 @@
         if(mode === 'light'){ root.classList.add('light'); toggle.setAttribute('aria-checked','false'); toggle.querySelector('.label').textContent='Light'; }
         else { root.classList.remove('light'); toggle.setAttribute('aria-checked','true'); toggle.querySelector('.label').textContent='Dark'; }
         localStorage.setItem('theme', mode);
-        // repaint charts when theme changes
         if (chartPnl) chartPnl.update();
         if (chartTotal) chartTotal.update();
         if (chartLife) chartLife.update();
@@ -128,52 +134,43 @@
       const d = parseInt(dRaw, 10);
       const key = (monRaw || '').toLowerCase().replace('.', '');
       const map = {
-        jan:0, january:0,
-        feb:1, february:1,
-        mar:2, march:2,
-        apr:3, april:3,
-        may:4,
-        jun:5, june:5,
-        jul:6, july:6,
-        aug:7, august:7,
-        sep:8, sept:8, september:8,
-        oct:9, october:9,
-        nov:10, november:10,
-        dec:11, december:11
-    };
-    const m = map[key];
-    const y = new Date().getFullYear();
-    return (m == null || isNaN(d)) ? new Date(0) : new Date(y, m, d);
-  }
+        jan:0, january:0, feb:1, february:1, mar:2, march:2, apr:3, april:3,
+        may:4, jun:5, june:5, jul:6, july:6, aug:7, august:7,
+        sep:8, sept:8, september:8, oct:9, october:9, nov:10, november:10, dec:11, december:11
+      };
+      const m = map[key];
+      const y = new Date().getFullYear();
+      return (m == null || isNaN(d)) ? new Date(0) : new Date(y, m, d);
+    }
     function filterByDays(items, days){
       const today = new Date(); today.setHours(0,0,0,0);
       const cutoff = new Date(today); cutoff.setDate(today.getDate() - (days - 1));
       return items.filter(it => it._d >= cutoff && it._d <= today);
     }
 
-    // ====== data fetch & prep ======
+    // ====== data fetch & prep (robust) ======
     async function fetchItems(){
-    const url = API_URL + '?ts=' + Date.now();
-    const res = await fetch(url, { cache:'no-store' });
-    if(!res.ok) throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
+      const url = API_URL + '?ts=' + Date.now();
+      const res = await fetch(url, { cache:'no-store' });
+      if(!res.ok) throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
 
-    const json = await res.json();
-    const today = new Date(); today.setHours(0,0,0,0);
+      const json = await res.json();
+      const today = new Date(); today.setHours(0,0,0,0);
 
-    let items = (json.items || [])
-      .map(it => ({ ...it, _d: parseDM(it.date) }))
-      .filter(it => it._d <= today)     // drop future rows
-      .sort((a,b) => a._d - b._d);
-      
-      // SAFE lifetime fill-in (only if backend didn't send it)
-    if (items.length > 0 && !('lifetime' in items[0])) {
-      let acc = 0;
-      items = items.map(it => ({ ...it, lifetime: (acc += (Number(it.pnl) || 0)) }));
+      let items = (json.items || [])
+        .map(it => ({ ...it, _d: parseDM(it.date) }))
+        .filter(it => it._d <= today)
+        .sort((a,b) => a._d - b._d);
+
+      // Safe lifetime fallback if backend didn't send it
+      if (items.length > 0 && !('lifetime' in items[0])) {
+        let acc = 0;
+        items = items.map(it => ({ ...it, lifetime: (acc += (Number(it.pnl)||0)) }));
+      }
+      return items;
     }
-    return items;
-  }
 
-    // ====== CSS var helper ======
+    // ====== helpers ======
     function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
     // ====== charts ======
@@ -229,7 +226,12 @@
     }
 
     function updateCharts(items){
+      if(!items || !items.length){
+        alert('No data to display yet.');
+        return;
+      }
       ensureCharts();
+
       const labels   = items.map(i => i.date);
       const totals   = items.map(i => i.total);
       const pnls     = items.map(i => i.pnl);
@@ -261,17 +263,17 @@
 
         const select = document.getElementById('rangeSelect');
         function applyRange(){
-          const days = Number(select.value) || 7;    // 7 or 30
-          const items = filterByDays(allItems, days);
-          updateCharts(items.length ? items : allItems.slice(-days));
+          const days = Number(select.value) || 7;           // 7 or 30
+          let items = filterByDays(allItems, days);
+          if (!items.length) items = allItems.slice(-days);
+          updateCharts(items);
         }
         select.addEventListener('change', applyRange);
-        applyRange(); // default 7 days
-      } catch(e){
-      alert('Could not load data: ' + (e && e.message ? e.message : e));
-      console.error(e);
+        applyRange(); // default (7 days)
+      }catch(e){
+        alert('Could not load data: ' + (e && e.message ? e.message : e));
+        console.error(e);
       }
-
     })();
   </script>
 </body>

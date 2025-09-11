@@ -124,12 +124,27 @@
     // ====== date helpers ======
     function parseDM(str){
       if(!str) return new Date(0);
-      const [d, mon] = String(str).trim().split(/\s+/);
-      const map = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-      const m = map[mon];
-      const y = new Date().getFullYear();
-      return (m == null) ? new Date(0) : new Date(y, m, parseInt(d,10));
-    }
+      const [dRaw, monRaw] = String(str).trim().split(/\s+/);
+      const d = parseInt(dRaw, 10);
+      const key = (monRaw || '').toLowerCase().replace('.', '');
+      const map = {
+        jan:0, january:0,
+        feb:1, february:1,
+        mar:2, march:2,
+        apr:3, april:3,
+        may:4,
+        jun:5, june:5,
+        jul:6, july:6,
+        aug:7, august:7,
+        sep:8, sept:8, september:8,
+        oct:9, october:9,
+        nov:10, november:10,
+        dec:11, december:11
+    };
+    const m = map[key];
+    const y = new Date().getFullYear();
+    return (m == null || isNaN(d)) ? new Date(0) : new Date(y, m, d);
+  }
     function filterByDays(items, days){
       const today = new Date(); today.setHours(0,0,0,0);
       const cutoff = new Date(today); cutoff.setDate(today.getDate() - (days - 1));
@@ -138,23 +153,25 @@
 
     // ====== data fetch & prep ======
     async function fetchItems(){
-      const res = await fetch(API_URL + '?ts=' + Date.now(), { cache:'no-store' });
-      if(!res.ok) throw new Error('Failed to fetch: ' + res.status);
-      const json = await res.json();
-      const today = new Date(); today.setHours(0,0,0,0);
+    const url = API_URL + '?ts=' + Date.now();
+    const res = await fetch(url, { cache:'no-store' });
+    if(!res.ok) throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
 
-      const items = (json.items || [])
-        .map(it => ({ ...it, _d: parseDM(it.date) }))
-        .filter(it => it._d <= today)
-        .sort((a,b) => a._d - b._d);
+    const json = await res.json();
+    const today = new Date(); today.setHours(0,0,0,0);
 
-      // If API doesn't send lifetime, compute it as running sum of daily PnL.
-      if (!('lifetime' in items[0] || items.length === 0)) {
-        let acc = 0;
-        for (const it of items) { acc += (Number(it.pnl)||0); it.lifetime = acc; }
-      }
-      return items;
+    let items = (json.items || [])
+      .map(it => ({ ...it, _d: parseDM(it.date) }))
+      .filter(it => it._d <= today)     // drop future rows
+      .sort((a,b) => a._d - b._d);
+      
+      // SAFE lifetime fill-in (only if backend didn't send it)
+    if (items.length > 0 && !('lifetime' in items[0])) {
+      let acc = 0;
+      items = items.map(it => ({ ...it, lifetime: (acc += (Number(it.pnl) || 0)) }));
     }
+    return items;
+  }
 
     // ====== CSS var helper ======
     function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -250,10 +267,11 @@
         }
         select.addEventListener('change', applyRange);
         applyRange(); // default 7 days
-      }catch(e){
-        alert('Could not load data. Check API URL/permissions.');
-        console.error(e);
+      } catch(e){
+      alert('Could not load data: ' + (e && e.message ? e.message : e));
+      console.error(e);
       }
+
     })();
   </script>
 </body>

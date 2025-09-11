@@ -79,7 +79,7 @@
       </div>
     </div>
   </main>
-
+  
   <script>
   // ====== SET YOUR /exec URL ======
   const API_URL = 'https://script.google.com/macros/s/AKfycbxvLrTsuDrN-hLpRC064ono14txRwsqpotV96FD0X0n0ZdhJhlk3UvZFV0racA0MAd5/exec';
@@ -99,9 +99,13 @@
     toggle.addEventListener('click', ()=> setTheme(root.classList.contains('light') ? 'dark' : 'light'));
   })();
 
-  function fmtINR(n){
-    return new Intl.NumberFormat('en-IN', { style:'currency', currency:'INR', maximumFractionDigits: 0 }).format(n);
-  }
+  // ✨ Currency formatter (USD)
+const LOCALE = 'en-US';
+const CURRENCY = 'USD';
+function fmt(n){
+  return new Intl.NumberFormat(LOCALE, { style:'currency', currency:CURRENCY, maximumFractionDigits: 2 }).format(n);
+}
+
 
   // Parse "19 Aug" -> Date(currentYear, 7, 19)
   function parseDM(str){
@@ -139,8 +143,8 @@
     const pnls   = items.map(i => i.pnl);
     const last   = items[items.length - 1];
 
-    document.getElementById('latestTotal').textContent = fmtINR(last.total);
-    document.getElementById('latestPnl').textContent   = (last.pnl >= 0 ? '+' : '') + fmtINR(last.pnl);
+    document.getElementById('latestTotal').textContent = fmt(last.total);
+    document.getElementById('latestPnl').textContent   = (last.pnl >= 0 ? '+' : '') + fmt(last.pnl);
     document.getElementById('updatedAt').textContent   = 'Updated: ' + new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
     document.getElementById('openRaw').href = API_URL + '?ts=' + Date.now();
 
@@ -158,14 +162,14 @@
         responsive: true,
         interaction: { mode: 'index', intersect: false },
         scales: {
-          y1: { type: 'linear', position: 'left'  },
-          y2: { type: 'linear', position: 'right', grid: { drawOnChartArea: false } },
+          y1: { type: 'linear', position: 'left',  ticks: { callback: v => fmt(v) } },
+          y2: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, ticks: { callback: v => fmt(v) } },
           x:  { ticks: { maxRotation: 0 } }
         },
         plugins: {
           legend: { position: 'top' },
           tooltip: { callbacks: {
-            label: c => c.dataset.label + ': ' + fmtINR(c.parsed.y)
+            label: c => c.dataset.label + ': ' + fmt(c.parsed.y)
           } }
         }
       }

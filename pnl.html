@@ -82,7 +82,15 @@
 
   <script>
     // ====== CONFIG: paste your Apps Script Web App URL here ======
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxsEP8FFQ89bV4EzxT2e7bmqrG2aaZtsHaDsXd5jhQLqMPVeDcYlCaWiZdgXA-qFcE/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycby6eq4eNm3GB5-obIMc27l5UMAKr6M0ckRLfC7i4_U0PNRV6qd6sEW69L3hmF4KFao0/exec';
+    // const API_URL = 'https://script.google.com/macros/s/XXXXXXXXXXXX/exec'; // paste your /exec URL
+
+    async function loadData(){
+      const res = await fetch(API_URL + '?ts=' + Date.now(), { cache: 'no-store' });
+      if(!res.ok) throw new Error('Failed to fetch: ' + res.status);
+      return res.json(); 
+    }
+
     // ============================================================
 
     // theme toggle (same behavior as index)

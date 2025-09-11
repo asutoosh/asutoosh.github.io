@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Your Name — PnL</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>📈</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* same design tokens as your main page */
+    :root{
+      --bg:#0b0c10; --panel:#111218; --text:#e6eaf0; --muted:#a9b1c3;
+      --brand:#66e3ff; --brand-2:#ae7bff; --ring: color-mix(in oklch, var(--brand), white 20%);
+      --border: color-mix(in oklch, var(--text), black 85%); --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:14px; --gap:clamp(16px, 2.2vw, 28px); --maxw:1100px;
+      --h1:clamp(40px,6vw,64px);
+    }
+    :root.light{
+      --bg:#f6f7fb; --panel:#ffffff; --text:#0f172a; --muted:#475569;
+      --brand:#2563eb; --brand-2:#9333ea; --border: color-mix(in oklch, var(--text), white 80%);
+      --shadow: 0 10px 30px rgba(0,0,0,.1);
+    }
+    *,*::before,*::after{box-sizing:border-box} *{margin:0}
+    body{
+      min-height:100vh; background:
+        radial-gradient(1200px 600px at 90% -10%, color-mix(in oklch, var(--brand) 30%, transparent), transparent 70%),
+        radial-gradient(900px 500px at -10% 20%, color-mix(in oklch, var(--brand-2) 24%, transparent), transparent 60%),
+        var(--bg);
+      color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    }
+    .container{width:min(100% - 2*var(--gap), var(--maxw)); margin-inline:auto}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(120%) blur(10px);
+      background: color-mix(in oklch, var(--bg) 85%, transparent); border-bottom:1px solid var(--border)}
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:14px}
+    .btn{border:1px solid var(--border); background:var(--panel); color:var(--text);
+      padding:.56rem .9rem; border-radius:12px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:var(--shadow)}
+    .btn.primary{background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#fff; border:none}
+    .panel{background:linear-gradient(180deg, color-mix(in oklch, var(--panel), transparent 15%), var(--panel));
+      border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow)}
+    h1{font-size:var(--h1); line-height:1.05; letter-spacing:-.02em}
+    .muted{color:var(--muted)}
+    main{padding-block: clamp(32px, 6vw, 64px)}
+    .grid{display:grid; gap:clamp(14px,2vw,22px)}
+    .grid-2{grid-template-columns:2fr 1fr} @media (max-width:900px){ .grid-2{grid-template-columns:1fr} }
+    .card{padding:18px}
+    .stat{font-size:28px; font-weight:800}
+    :focus-visible{outline:2px solid var(--ring); outline-offset:2px; border-radius:8px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="btn" href="index.html">← Back</a>
+      <div style="display:flex; align-items:center; gap:10px">
+        <button class="btn" id="themeToggle" role="switch" aria-checked="false" title="Toggle theme">🌓 <span class="label">Dark</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Daily PnL & Total Value</h1>
+    <p class="muted">Auto-updated from Google Sheets at 5:30 AM IST</p>
+
+    <div class="grid grid-2" style="margin-top:16px">
+      <div class="panel card">
+        <canvas id="chart" height="140" aria-label="PnL chart" role="img"></canvas>
+      </div>
+      <div class="panel card">
+        <div class="stat" id="latestTotal">—</div>
+        <div class="muted">Latest Total Value</div>
+        <div style="height:12px"></div>
+        <div class="stat" id="latestPnl">—</div>
+        <div class="muted">Latest Daily PnL</div>
+        <div style="height:12px"></div>
+        <div class="muted" id="updatedAt">Updated: —</div>
+        <div style="height:16px"></div>
+        <a class="btn" id="openRaw" href="#" target="_blank" rel="noopener">Open Raw JSON</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ====== CONFIG: paste your Apps Script Web App URL here ======
+    const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+    // ============================================================
+
+    // theme toggle (same behavior as index)
+    (function(){
+      const root = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('theme');
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+      function setTheme(mode){
+        if(mode === 'light'){ root.classList.add('light'); toggle.setAttribute('aria-checked','false'); toggle.querySelector('.label').textContent='Light'; }
+        else { root.classList.remove('light'); toggle.setAttribute('aria-checked','true'); toggle.querySelector('.label').textContent='Dark'; }
+        localStorage.setItem('theme', mode);
+      }
+      setTheme(saved ?? (prefersLight ? 'light' : 'dark'));
+      toggle.addEventListener('click', ()=> setTheme(root.classList.contains('light') ? 'dark' : 'light'));
+    })();
+
+    function fmtINR(n){
+      return new Intl.NumberFormat('en-IN', { style:'currency', currency:'INR', maximumFractionDigits: 0 }).format(n);
+    }
+
+    async function loadData(){
+      const res = await fetch(API_URL, { cache: 'no-cache' });
+      if(!res.ok) throw new Error('Failed to fetch data');
+      return res.json();
+    }
+
+    function render(items){
+      if(!items.length) return;
+      const labels = items.map(i => i.date);
+      const totals = items.map(i => i.total);
+      const pnls   = items.map(i => i.pnl);
+      const last   = items[items.length - 1];
+
+      document.getElementById('latestTotal').textContent = fmtINR(last.total);
+      document.getElementById('latestPnl').textContent   = (last.pnl >= 0 ? '+' : '') + fmtINR(last.pnl);
+      document.getElementById('updatedAt').textContent   = 'Updated: ' + new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      document.getElementById('openRaw').href = API_URL;
+
+      const ctx = document.getElementById('chart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Total Value', data: totals, yAxisID: 'y1', tension: 0.25 },
+            { label: 'Daily PnL',   data: pnls,   yAxisID: 'y2', tension: 0.25 }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            y1: { type: 'linear', position: 'left'  },
+            y2: { type: 'linear', position: 'right', grid: { drawOnChartArea: false } },
+            x:  { ticks: { maxRotation: 0 } }
+          },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: { callbacks: {
+              label: c => c.dataset.label + ': ' + fmtINR(c.parsed.y)
+            } }
+          }
+        }
+      });
+    }
+
+    (async function init(){
+      try{
+        const json = await loadData();
+        // expect { items: [{ date, total, pnl }, ...] }
+        const items = (json.items || []).slice().sort((a,b)=> a.date.localeCompare(b.date));
+        render(items);
+      }catch(e){
+        alert('Could not load data. Check API URL/permissions.');
+        console.error(e);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,99 +1,596 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asutoosh | Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content="Portfolio of Your Name — Frontend developer, designer, and builder of delightful web experiences." />
+  <title>Your Name — Portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>✨</text></svg>">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background: #f4f4f4;
-      color: #333;
+    /* ------------------------------
+       CSS RESET (modern, minimal)
+    ------------------------------ */
+    *,*::before,*::after{box-sizing:border-box}
+    *{margin:0}
+    html:focus-within{scroll-behavior:smooth}
+    body{min-height:100vh;text-rendering:optimizeLegibility;line-height:1.6}
+    img,svg,video{max-width:100%;display:block}
+    button,input,textarea,select{font:inherit}
+    a{color:inherit}
+
+    /* ------------------------------
+       THEME TOKENS
+    ------------------------------ */
+    :root{
+      --bg: #0b0c10;
+      --panel: #111218;
+      --text: #e6eaf0;
+      --muted: #a9b1c3;
+      --brand: #66e3ff;
+      --brand-2:#ae7bff;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --ring: color-mix(in oklch, var(--brand), white 20%);
+      --border: color-mix(in oklch, var(--text), black 85%);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --gap: clamp(16px, 2.2vw, 28px);
+      --maxw: 1100px;
+      --grid-gap: clamp(14px, 2vw, 22px);
+      --h1: clamp(40px, 6vw, 64px);
+      --h2: clamp(28px, 4vw, 40px);
+      --h3: clamp(20px, 2.6vw, 24px);
     }
-    header {
-      background: #1d3557;
-      color: #fff;
-      padding: 20px 0;
-      text-align: center;
+    :root.light{
+      --bg:#f6f7fb;
+      --panel:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --brand:#2563eb;
+      --brand-2:#9333ea;
+      --border: color-mix(in oklch, var(--text), white 80%);
+      --shadow: 0 10px 30px rgba(0,0,0,.1);
     }
-    nav a {
-      color: #fff;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: bold;
+
+    /* ------------------------------
+       BASE LAYOUT
+    ------------------------------ */
+    body{
+      background: radial-gradient(1200px 600px at 90% -10%, color-mix(in oklch, var(--brand) 30%, transparent), transparent 70%),
+                  radial-gradient(900px 500px at -10% 20%, color-mix(in oklch, var(--brand-2) 24%, transparent), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      padding-bottom: 64px;
     }
-    nav a:hover {
-      text-decoration: underline;
+    .container{width: min(100% - 2*var(--gap), var(--maxw)); margin-inline:auto}
+    section{padding-block: clamp(56px, 9vw, 96px)}
+    .panel{
+      background:linear-gradient(180deg, color-mix(in oklch, var(--panel), transparent 15%), var(--panel));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
     }
-    section {
-      padding: 60px 20px;
-      max-width: 900px;
-      margin: auto;
+
+    /* ------------------------------
+       HEADER / NAV
+    ------------------------------ */
+    .skip a{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip a:focus{position:fixed;left:var(--gap);top:var(--gap);width:auto;height:auto;background:var(--panel);padding:.6rem 1rem;border-radius:10px;border:1px solid var(--border);z-index:999}
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(10px);
+      background: color-mix(in oklch, var(--bg) 85%, transparent);
+      border-bottom:1px solid var(--border);
     }
-    h1, h2 {
-      text-align: center;
-      color: #1d3557;
+    .nav{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding-block:14px;
     }
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      margin-top: 20px;
-      background: #e63946;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s;
+    .brand{
+      display:flex; align-items:center; gap:12px; text-decoration:none; font-weight:800; letter-spacing:.2px
     }
-    .btn:hover {
-      background: #d62839;
+    .brand-badge{
+      width:34px;height:34px; border-radius:10px;
+      background: conic-gradient(from 0deg, var(--brand), var(--brand-2));
+      display:grid;place-items:center; color:white; font-size:14px; font-weight:900;
+      box-shadow: var(--shadow);
     }
-    footer {
-      background: #1d3557;
-      color: #fff;
-      text-align: center;
-      padding: 15px;
-      margin-top: 40px;
+    nav ul{display:flex; gap:18px; list-style:none}
+    nav a{opacity:.85; text-decoration:none; padding:.45rem .7rem; border-radius:10px}
+    nav a:hover, nav a:focus-visible{opacity:1; outline:none; background: color-mix(in oklch, var(--panel), transparent 50%); box-shadow: inset 0 0 0 1px var(--border)}
+    .actions{display:flex; align-items:center; gap:10px}
+    .btn, button[role="switch"]{
+      border:1px solid var(--border); background:var(--panel); color:var(--text);
+      padding:.56rem .9rem; border-radius:12px; cursor:pointer; text-decoration:none;
+      box-shadow: var(--shadow);
     }
+    .btn.primary{background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:white; border:none}
+    .btn.ghost{background:transparent;border:1px solid var(--border)}
+    .theme-toggle{display:flex; align-items:center; gap:8px}
+    .hamburger{display:none; padding:.5rem .6rem}
+
+    @media (max-width: 860px){
+      nav{display:none}
+      nav.open{display:block; position:absolute; inset-inline:0; top:62px; background:var(--panel); border-bottom:1px solid var(--border)}
+      nav.open ul{flex-direction:column; padding:10px}
+      .hamburger{display:inline-grid; place-items:center}
+    }
+
+    /* ------------------------------
+       TYPOGRAPHY
+    ------------------------------ */
+    h1{font-size:var(--h1); line-height:1.05; letter-spacing:-.02em}
+    h2{font-size:var(--h2); line-height:1.15; margin-bottom:14px; letter-spacing:-.01em}
+    h3{font-size:var(--h3); line-height:1.25}
+    p.lead{font-size: clamp(16px, 1.9vw, 20px); color:var(--muted)}
+
+    /* ------------------------------
+       HERO
+    ------------------------------ */
+    .hero{
+      display:grid; align-items:center; grid-template-columns: 1.15fr .85fr; gap: var(--grid-gap);
+    }
+    .hero .card{padding: clamp(18px, 2.4vw, 28px)}
+    .hero-cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+    .tagline{display:inline-flex; align-items:center; gap:8px; padding:.35rem .6rem; border-radius:999px; border:1px solid var(--border); background: color-mix(in oklch, var(--panel), transparent 35%); font-size:.9rem; color:var(--muted); margin-bottom:10px}
+    .avatar{
+      aspect-ratio:1/1; border-radius:22px; overflow:hidden; position:relative; isolation:isolate;
+      background:
+        radial-gradient(800px 400px at 120% -20%, color-mix(in oklch, var(--brand) 30%, transparent), transparent 60%),
+        linear-gradient(135deg, color-mix(in oklch, var(--panel), transparent 25%), var(--panel));
+      border:1px solid var(--border);
+    }
+    .avatar::after{
+      content:""; position:absolute; inset:auto -30% 8% -30%; height:48%;
+      background:radial-gradient(closest-side, color-mix(in oklch, var(--brand-2) 40%, transparent), transparent);
+      filter:blur(30px); opacity:.7; z-index:-1;
+    }
+    .avatar .placeholder{
+      display:grid; place-items:center; height:100%; font-size:48px; color:white; opacity:.9;
+    }
+
+    @media (max-width: 900px){ .hero{grid-template-columns:1fr; } }
+
+    /* ------------------------------
+       SECTION: GRID HELPERS
+    ------------------------------ */
+    .grid{display:grid; gap:var(--grid-gap)}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width: 860px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+
+    /* ------------------------------
+       PROJECT CARDS
+    ------------------------------ */
+    .cards{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--grid-gap)}
+    @media (max-width: 1020px){ .cards{grid-template-columns:repeat(2,minmax(0,1fr))} }
+    @media (max-width: 700px){ .cards{grid-template-columns:1fr} }
+
+    .card{
+      border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--panel); box-shadow:var(--shadow);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .card:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.35); border-color: color-mix(in oklch, var(--brand), var(--border) 50%)}
+    .thumb{aspect-ratio: 16/10; background:
+        radial-gradient(600px 300px at 120% -30%, color-mix(in oklch, var(--brand) 18%, transparent), transparent 60%),
+        radial-gradient(600px 300px at -20% 120%, color-mix(in oklch, var(--brand-2) 18%, transparent), transparent 60%),
+        linear-gradient(135deg, #1b1f2a, #141824);
+      border-bottom:1px solid var(--border);
+      display:grid; place-items:center; color:#dbeafe; font-weight:800; letter-spacing:.6px
+    }
+    .card .body{padding:16px 16px 18px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    .chip{font-size:.8rem; padding:.28rem .55rem; border-radius:999px; border:1px solid var(--border); color:var(--muted)}
+    .card .actions{justify-content:flex-start}
+    .link{display:inline-flex; align-items:center; gap:8px; text-decoration:none}
+    .link svg{width:18px;height:18px}
+
+    /* ------------------------------
+       SKILLS
+    ------------------------------ */
+    .skillset{display:flex; flex-wrap:wrap; gap:10px}
+    .pill{padding:.5rem .7rem; border-radius:999px; border:1px solid var(--border); background: color-mix(in oklch, var(--panel), transparent 45%)}
+    .meter{height:8px; background:color-mix(in oklch, var(--panel), black 6%); border:1px solid var(--border); border-radius:999px; overflow:hidden}
+    .meter > i{display:block; height:100%; background:linear-gradient(90deg, var(--brand), var(--brand-2))}
+
+    /* ------------------------------
+       TIMELINE
+    ------------------------------ */
+    .timeline{position:relative; padding-left:24px}
+    .timeline::before{content:""; position:absolute; left:4px; top:4px; bottom:4px; width:2px; background: linear-gradient(var(--brand), var(--brand-2)); opacity:.5}
+    .t-item{position:relative; margin-bottom:18px}
+    .t-item::before{content:""; position:absolute; left:-2px; top:.35rem; width:10px; height:10px; border-radius:50%; background:var(--brand); box-shadow:0 0 0 3px color-mix(in oklch, var(--brand), transparent 70%)}
+
+    /* ------------------------------
+       CONTACT
+    ------------------------------ */
+    form{display:grid; gap:12px}
+    .field{display:grid; gap:6px}
+    input, textarea{
+      background: color-mix(in oklch, var(--panel), transparent 35%);
+      border:1px solid var(--border); border-radius:12px; padding:.7rem .9rem; color:var(--text)
+    }
+    input:focus, textarea:focus{outline:2px solid var(--ring); outline-offset:2px}
+    .form-row{display:grid; grid-template-columns:1fr 1fr; gap:var(--grid-gap)}
+    @media (max-width:700px){ .form-row{grid-template-columns:1fr} }
+    .note{color:var(--muted); font-size:.95rem}
+
+    /* ------------------------------
+       REVEAL ANIMATIONS
+    ------------------------------ */
+    [data-animate]{opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease}
+    [data-animate].in{opacity:1; transform:none}
+    @media (prefers-reduced-motion: reduce){
+      html:focus-within{scroll-behavior:auto}
+      [data-animate]{opacity:1 !important; transform:none !important; transition:none !important}
+      .card, .card:hover{transform:none !important}
+    }
+
+    /* ------------------------------
+       FOOTER
+    ------------------------------ */
+    footer{margin-top:40px; color:var(--muted)}
+    .foot{display:flex; justify-content:space-between; align-items:center; gap:10px; padding-top:18px; border-top:1px solid var(--border)}
+    @media (max-width:700px){ .foot{flex-direction:column; align-items:flex-start} }
+
+    /* focus ring */
+    :focus-visible{outline:2px solid var(--ring); outline-offset:2px; border-radius:8px}
   </style>
 </head>
 <body>
+  <div class="skip"><a href="#main">Skip to content</a></div>
 
+  <!-- =================== NAV =================== -->
   <header>
-    <h1>👋 Hi, I'm Asutoosh</h1>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a class="brand" href="#">
+        <span class="brand-badge" aria-hidden="true">YN</span>
+        <span>Your&nbsp;Name</span>
+      </a>
+      <button class="hamburger btn ghost" aria-label="Toggle Menu" aria-controls="site-nav" aria-expanded="false">
+        <!-- menu icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <nav id="site-nav" aria-label="Section links">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="actions">
+        <a class="btn ghost" href="#projects">View Work</a>
+        <button class="btn theme-toggle" id="themeToggle" role="switch" aria-checked="false" title="Toggle theme">
+          <span aria-hidden="true">🌓</span><span class="label" style="font-size:.92rem">Dark</span>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p>Welcome to my website! I'm a student and developer interested in web, open-source, and cool projects. This site is hosted on GitHub Pages and secured with HTTPS.</p>
-  </section>
+  <main id="main">
+    <!-- =================== HERO =================== -->
+    <section class="container hero" id="home" data-animate>
+      <div class="card panel">
+        <div class="tagline">👋 Hey, I’m <strong>&nbsp;Your Name</strong></div>
+        <h1>Building fast, accessible & beautiful web experiences.</h1>
+        <p class="lead">Full-stack developer with a design eye. I craft products that are performant, accessible, and a joy to use.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#contact">Hire Me</a>
+          <a class="btn ghost" href="#projects">See Projects</a>
+          <a class="link" href="mailto:you@example.com" aria-label="Email">
+            <!-- mail icon -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 0 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            you@example.com
+          </a>
+        </div>
+      </div>
+      <div class="avatar panel card" aria-label="Profile photo">
+        <!-- Replace with your image <img src="your-photo.jpg" alt="Your Name"> -->
+        <div class="placeholder">🙂</div>
+      </div>
+    </section>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <p>Here are some things I’ve worked on:</p>
-    <ul>
-      <li>🚀 Project 1 – My cool app</li>
-      <li>💻 Project 2 – Another fun project</li>
-      <li>🌐 Project 3 – Something live on the web</li>
-    </ul>
-    <a class="btn" href="https://github.com/asutoosh" target="_blank">View My GitHub</a>
-  </section>
+    <!-- =================== ABOUT =================== -->
+    <section class="container grid grid-2" id="about" data-animate>
+      <div class="panel card" style="padding:24px">
+        <h2>About</h2>
+        <p>I'm a developer who loves clean UX, performance, and maintainable code. I work across the stack with a focus on frontend craft: semantic HTML, modern CSS, and accessible, testable JavaScript.</p>
+        <p style="margin-top:10px">When I’m not coding, I’m sketching interfaces, reading docs (for fun), and brewing dangerously strong coffee.</p>
+        <div class="skillset" style="margin-top:14px">
+          <span class="pill">Remote-friendly</span>
+          <span class="pill">8+ hrs overlap IST</span>
+          <span class="pill">Speaks: EN / Hi</span>
+        </div>
+      </div>
+      <div class="panel card" style="padding:24px">
+        <h2>Quick Stats</h2>
+        <div class="grid">
+          <div>
+            <h3>Performance</h3>
+            <div class="meter" aria-label="Performance skill 90%"><i style="width:90%"></i></div>
+          </div>
+          <div>
+            <h3>Accessibility</h3>
+            <div class="meter" aria-label="Accessibility skill 85%"><i style="width:85%"></i></div>
+          </div>
+          <div>
+            <h3>Design Systems</h3>
+            <div class="meter" aria-label="Design Systems skill 80%"><i style="width:80%"></i></div>
+          </div>
+        </div>
+        <p class="note" style="margin-top:10px">Numbers reflect recent projects and Lighthouse scores.</p>
+      </div>
+    </section>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>You can reach me at:</p>
-    <p><a href="mailto:your@email.com">your@email.com</a></p>
-  </section>
+    <!-- =================== SKILLS =================== -->
+    <section class="container" id="skills" data-animate>
+      <h2>Skills</h2>
+      <p class="note">My day-to-day toolkit</p>
+      <div class="skillset" style="margin-top:10px">
+        <span class="pill">HTML5</span>
+        <span class="pill">CSS3 / Flexbox / Grid</span>
+        <span class="pill">JavaScript (ES202x)</span>
+        <span class="pill">TypeScript</span>
+        <span class="pill">React</span>
+        <span class="pill">Node.js</span>
+        <span class="pill">Next.js</span>
+        <span class="pill">Tailwind / Vanilla CSS</span>
+        <span class="pill">REST / GraphQL</span>
+        <span class="pill">Testing (Jest/RTL)</span>
+        <span class="pill">Git / CI</span>
+        <span class="pill">Figma</span>
+      </div>
+    </section>
 
-  <footer>
-    <p>© 2025 Asutoosh | Built with ❤️ and GitHub Pages</p>
+    <!-- =================== PROJECTS =================== -->
+    <section class="container" id="projects" data-animate>
+      <h2>Featured Projects</h2>
+      <p class="note">A few things I’ve shipped recently</p>
+      <div class="cards" style="margin-top:12px">
+        <!-- Project 1 -->
+        <article class="card">
+          <div class="thumb">SaaS Dashboard</div>
+          <div class="body">
+            <h3>Pulse — Analytics Dashboard</h3>
+            <p>Realtime charts, role-based access, and a clean component library. 100/100 Lighthouse.</p>
+            <div class="chips">
+              <span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Vite</span>
+            </div>
+            <div class="actions" style="margin-top:12px">
+              <a class="link btn ghost" href="#" aria-label="Live demo"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5h11M19 5v11M19 5 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Live</a>
+              <a class="link btn ghost" href="#" aria-label="Source code"><svg viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6L2 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Code</a>
+            </div>
+          </div>
+        </article>
+        <!-- Project 2 -->
+        <article class="card">
+          <div class="thumb">E-commerce</div>
+          <div class="body">
+            <h3>Leaf — Plant Store</h3>
+            <p>PWA with offline cart, instant search, and checkout UI. Sub-1s TTI on 4G.</p>
+            <div class="chips">
+              <span class="chip">Next.js</span><span class="chip">Stripe</span><span class="chip">PWA</span>
+            </div>
+            <div class="actions" style="margin-top:12px">
+              <a class="link btn ghost" href="#">Live</a>
+              <a class="link btn ghost" href="#">Code</a>
+            </div>
+          </div>
+        </article>
+        <!-- Project 3 -->
+        <article class="card">
+          <div class="thumb">Design System</div>
+          <div class="body">
+            <h3>Quartz UI — Design System</h3>
+            <p>Themeable components, tokens, docs site, and CI visual tests.</p>
+            <div class="chips">
+              <span class="chip">Storybook</span><span class="chip">CSS Vars</span><span class="chip">Chromatic</span>
+            </div>
+            <div class="actions" style="margin-top:12px">
+              <a class="link btn ghost" href="#">Docs</a>
+              <a class="link btn ghost" href="#">Code</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =================== EXPERIENCE =================== -->
+    <section class="container grid grid-2" id="experience" data-animate>
+      <div class="panel card" style="padding:22px">
+        <h2>Experience</h2>
+        <div class="timeline" style="margin-top:6px">
+          <div class="t-item">
+            <h3>Senior Frontend Engineer — Acme Inc</h3>
+            <p class="note">2023 — Present • Remote</p>
+            <p>Lead web performance, built internal design system, mentored 4 engineers.</p>
+          </div>
+          <div class="t-item">
+            <h3>Frontend Engineer — BrightApps</h3>
+            <p class="note">2021 — 2023 • Bengaluru</p>
+            <p>Shipped dashboards & dashboards (yes), increased conversion by 17%.</p>
+          </div>
+          <div class="t-item">
+            <h3>Freelance — Web Developer</h3>
+            <p class="note">2019 — 2021 • Worldwide</p>
+            <p>Delivered 20+ responsive websites for startups & creators.</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel card" style="padding:22px">
+        <h2>Education & Certs</h2>
+        <div class="timeline">
+          <div class="t-item">
+            <h3>B.Tech — Computer Science</h3>
+            <p class="note">2015 — 2019 • VTU</p>
+            <p>Graduated with honors. Led coding club.</p>
+          </div>
+          <div class="t-item">
+            <h3>Google UX Design (Coursera)</h3>
+            <p class="note">2022</p>
+            <p>Research → wireframes → prototypes → usability tests.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== TESTIMONIALS =================== -->
+    <section class="container" data-animate>
+      <h2>What clients say</h2>
+      <div class="grid grid-3" style="margin-top:12px">
+        <blockquote class="panel card" style="padding:18px">
+          <p>“Lightning fast and pixel-perfect. Our metrics jumped the same week.”</p>
+          <p class="note">— Priya Sharma, Product Lead</p>
+        </blockquote>
+        <blockquote class="panel card" style="padding:18px">
+          <p>“Communicates clearly, delivers on time, and thinks like a designer.”</p>
+          <p class="note">— Daniel Kim, Founder</p>
+        </blockquote>
+        <blockquote class="panel card" style="padding:18px">
+          <p>“Set up CI, tests, and docs—maintenance has been easy ever since.”</p>
+          <p class="note">— Ayesha Khan, Eng Manager</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- =================== CONTACT =================== -->
+    <section class="container grid grid-2" id="contact" data-animate>
+      <div class="panel card" style="padding:22px">
+        <h2>Let’s work together</h2>
+        <p class="note">Tell me about your project and I’ll get back within 24 hours.</p>
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" autocomplete="name" required placeholder="Your name">
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@email.com">
+            </div>
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="6" required placeholder="What are we building?"></textarea>
+          </div>
+          <div class="actions">
+            <button class="btn primary" type="submit">Send Message</button>
+            <button class="btn ghost" type="button" id="copyEmail">Copy Email</button>
+          </div>
+          <p id="formNote" class="note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <div class="panel card" style="padding:22px">
+        <h2>Links</h2>
+        <div class="grid">
+          <a class="btn ghost link" href="#" aria-label="GitHub profile">
+            <!-- GitHub icon -->
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.21.68-.48v-1.7c-2.78.6-3.37-1.18-3.37-1.18-.46-1.16-1.12-1.47-1.12-1.47-.92-.63.07-.62.07-.62 1.02.07 1.55 1.05 1.55 1.05 .9 1.54 2.36 1.1 2.94.84 .09-.66 .35-1.1 .63-1.36 -2.22-.25-4.56-1.11-4.56-4.93 0-1.09 .39-1.98 1.03-2.68 -.1-.25 -.45-1.27 .1-2.65 0 0 .84-.27 2.75 1.02 .8-.22 1.66-.33 2.51-.33s1.71 .11 2.51 .33c1.91-1.29 2.75-1.02 2.75-1.02 .55 1.38 .2 2.4 .1 2.65 .64 .7 1.03 1.59 1.03 2.68 0 3.83 -2.34 4.67 -4.57 4.92 .36 .31 .68 .92 .68 1.86v2.76c0 .27 .18 .58 .69 .48A10 10 0 0 0 12 2z" stroke="currentColor" stroke-width="1"/></svg>
+            GitHub
+          </a>
+          <a class="btn ghost link" href="#" aria-label="LinkedIn profile">
+            <!-- LinkedIn icon -->
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5V24H0V8zm8 0h4.8v2.2h.07c.67-1.26 2.3-2.6 4.73-2.6C22.4 7.6 24 10 24 14.3V24h-5V15.4c0-2.05-.04-4.69-2.86-4.69-2.86 0-3.3 2.23-3.3 4.53V24H8V8z" fill="currentColor"/></svg>
+            LinkedIn
+          </a>
+          <a class="btn ghost link" href="#" aria-label="Resume PDF">📄 Resume</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =================== FOOTER =================== -->
+  <footer class="container">
+    <div class="foot">
+      <p>© <span id="year"></span> Your Name. All rights reserved.</p>
+      <p class="note">Built with semantic HTML, modern CSS, and vanilla JS.</p>
+    </div>
   </footer>
 
+  <script>
+    // =================== THEME TOGGLE ===================
+    (function(){
+      const root = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('theme');
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+      function setTheme(mode){
+        if(mode === 'light'){ root.classList.add('light'); toggle.setAttribute('aria-checked','false'); toggle.querySelector('.label').textContent='Light'; }
+        else { root.classList.remove('light'); toggle.setAttribute('aria-checked','true'); toggle.querySelector('.label').textContent='Dark'; }
+        localStorage.setItem('theme', mode);
+      }
+      setTheme(saved ?? (prefersLight ? 'light' : 'dark'));
+      toggle.addEventListener('click', ()=> setTheme(root.classList.contains('light') ? 'dark' : 'light'));
+    })();
+
+    // =================== MOBILE NAV ===================
+    (function(){
+      const btn = document.querySelector('.hamburger');
+      const nav = document.getElementById('site-nav');
+      btn.addEventListener('click', ()=>{
+        const open = nav.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      // close when clicking a link (mobile)
+      nav.addEventListener('click', e=>{
+        if(e.target.tagName === 'A'){ nav.classList.remove('open'); document.querySelector('.hamburger').setAttribute('aria-expanded','false'); }
+      });
+    })();
+
+    // =================== REVEAL ON SCROLL ===================
+    (function(){
+      const els = document.querySelectorAll('[data-animate]');
+      const io = new IntersectionObserver((entries)=>{
+        for(const e of entries){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        }
+      }, {threshold: 0.2});
+      els.forEach(el=> io.observe(el));
+    })();
+
+    // =================== CONTACT FORM (mailto + validation) ===================
+    (function(){
+      const form = document.getElementById('contactForm');
+      const note = document.getElementById('formNote');
+      const copyBtn = document.getElementById('copyEmail');
+      const emailAddr = 'you@example.com'; // change this
+
+      copyBtn.addEventListener('click', async ()=>{
+        try{
+          await navigator.clipboard.writeText(emailAddr);
+          note.textContent = 'Email copied to clipboard ✅';
+        }catch{ note.textContent = 'Could not copy email. Long press / right click to copy.' }
+      });
+
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const message = form.message.value.trim();
+
+        // simple validation
+        if(!name || !email || !message){
+          note.textContent = 'Please fill all fields.';
+          return;
+        }
+        const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if(!okEmail){ note.textContent = 'Please enter a valid email address.'; return; }
+
+        // open default mail client
+        const subject = encodeURIComponent('Portfolio inquiry from ' + name);
+        const body = encodeURIComponent(`Hi,\n\n${message}\n\n— ${name}\n${email}`);
+        window.location.href = `mailto:${emailAddr}?subject=${subject}&body=${body}`;
+        note.textContent = 'Opening your email client…';
+      });
+    })();
+
+    // =================== YEAR ===================
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

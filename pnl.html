@@ -13,6 +13,8 @@
       --brand:#66e3ff; --brand-2:#ae7bff; --ring: color-mix(in oklch, var(--brand), white 20%);
       --border: color-mix(in oklch, var(--text), black 85%); --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:14px; --gap:clamp(16px, 2.2vw, 28px); --maxw:1100px; --h1:clamp(40px,6vw,64px);
+      --pos:#22c55e; /* profit green */
+      --neg:#ef4444; /* loss red   */
     }
     :root.light{
       --bg:#f6f7fb; --panel:#ffffff; --text:#0f172a; --muted:#475569;
@@ -146,34 +148,57 @@
     }
 
     // ====== charts ======
-    let chartTotal = null;
-    let chartPnl = null;
-    function ensureCharts(){
-      if(!chartTotal){
-        chartTotal = new Chart(document.getElementById('chartTotal'), {
-          type: 'line',
-          data: { labels: [], datasets: [{ label: 'Total Value', data: [], tension: 0.25 }] },
-          options: {
-            responsive: true,
-            interaction: { mode: 'index', intersect: false },
-            scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
-            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
-          }
-        });
-      }
-      if(!chartPnl){
-        chartPnl = new Chart(document.getElementById('chartPnl'), {
-          type: 'bar',
-          data: { labels: [], datasets: [{ label: 'Daily PnL', data: [] }] },
-          options: {
-            responsive: true,
-            interaction: { mode: 'index', intersect: false },
-            scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
-            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
-          }
-        });
-      }
+    <script>
+  // ... keep everything above as-is ...
+
+  // helper to read CSS variables
+  function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  let chartTotal = null;
+  let chartPnl = null;
+  function ensureCharts(){
+    if(!chartTotal){
+      chartTotal = new Chart(document.getElementById('chartTotal'), {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: 'Total Value', data: [], tension: 0.25 }] },
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
+          plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
+        }
+      });
     }
+    if(!chartPnl){
+      chartPnl = new Chart(document.getElementById('chartPnl'), {
+        type: 'bar',
+        data: { labels: [], datasets: [{
+          label: 'Daily PnL',
+          data: [],
+          backgroundColor: (ctx) => {
+            const v = ctx.parsed.y;
+            if (v > 0) return cssVar('--pos') || '#22c55e';
+            if (v < 0) return cssVar('--neg') || '#ef4444';
+            return cssVar('--muted') || '#a9b1c3';
+          },
+          borderColor: (ctx) => {
+            const v = ctx.parsed.y;
+            if (v > 0) return cssVar('--pos') || '#22c55e';
+            if (v < 0) return cssVar('--neg') || '#ef4444';
+            return cssVar('--muted') || '#a9b1c3';
+          },
+          borderWidth: 1
+        }]},
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
+          plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
+        }
+      });
+    }
+  }
+
     function updateCharts(items){
       ensureCharts();
       const labels = items.map(i => i.date);

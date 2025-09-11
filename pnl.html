@@ -101,7 +101,7 @@
 
   <script>
     // ====== SET YOUR /exec URL ======
-    const API_URL = 'https://script.google.com/macros/s/AKfycbylyp_BY1e0bwkwXHhKyIKDY2jjgpST306WQSwQtikQIXxvPb6rVLKLgET2qyLW_aLD/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxvLrTsuDrN-hLpRC064ono14txRwsqpotV96FD0X0n0ZdhJhlk3UvZFV0racA0MAd5/exec';
 
     // ====== THEME TOGGLE ======
     let chartTotal = null, chartPnl = null, chartLife = null;
@@ -172,17 +172,22 @@
 
     // ====== helpers ======
     function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+    function safeY(ctx){ // for scriptable options/tooltip where parsed may be missing
+      if (ctx && ctx.parsed && typeof ctx.parsed.y === 'number') return ctx.parsed.y;
+      if (ctx && typeof ctx.raw === 'number') return ctx.raw;
+      return 0;
+    }
 
     // ====== charts ======
     function ensureCharts(){
       if(!chartTotal){
         chartTotal = new Chart(document.getElementById('chartTotal'), {
           type: 'line',
-          data: { labels: [], datasets: [{ label: 'Total Value', data: [], tension: 0.25 }] },
+          data: { labels: [], datasets: [{ label: 'Total Value', data: [], tension: 0.25, spanGaps: true }] },
           options: {
             responsive: true, interaction: { mode: 'index', intersect: false },
             scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
-            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
+            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(safeY(c)) } } }
           }
         });
       }
@@ -190,15 +195,16 @@
         chartPnl = new Chart(document.getElementById('chartPnl'), {
           type: 'bar',
           data: { labels: [], datasets: [{
-            label: 'Daily PnL', data: [],
+            label: 'Daily PnL',
+            data: [],
             backgroundColor: (ctx) => {
-              const v = ctx.parsed.y;
+              const v = safeY(ctx);
               if (v > 0) return cssVar('--pos') || '#22c55e';
               if (v < 0) return cssVar('--neg') || '#ef4444';
               return cssVar('--muted') || '#a9b1c3';
             },
             borderColor: (ctx) => {
-              const v = ctx.parsed.y;
+              const v = safeY(ctx);
               if (v > 0) return cssVar('--pos') || '#22c55e';
               if (v < 0) return cssVar('--neg') || '#ef4444';
               return cssVar('--muted') || '#a9b1c3';
@@ -208,18 +214,18 @@
           options: {
             responsive: true, interaction: { mode: 'index', intersect: false },
             scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
-            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
+            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(safeY(c)) } } }
           }
         });
       }
       if(!chartLife){
         chartLife = new Chart(document.getElementById('chartLife'), {
           type: 'line',
-          data: { labels: [], datasets: [{ label: 'Lifetime PnL', data: [], tension: 0.25 }] },
+          data: { labels: [], datasets: [{ label: 'Lifetime PnL', data: [], tension: 0.25, spanGaps: true }] },
           options: {
             responsive: true, interaction: { mode: 'index', intersect: false },
             scales: { y: { ticks: { callback: v => fmt(v) } }, x: { ticks: { maxRotation: 0 } } },
-            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } } }
+            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(safeY(c)) } } }
           }
         });
       }
@@ -233,9 +239,9 @@
       ensureCharts();
 
       const labels   = items.map(i => i.date);
-      const totals   = items.map(i => i.total);
-      const pnls     = items.map(i => i.pnl);
-      const lifetime = items.map(i => i.lifetime);
+      const totals   = items.map(i => Number(i.total) || 0);
+      const pnls     = items.map(i => Number(i.pnl) || 0);
+      const lifetime = items.map(i => Number(i.lifetime) || 0);
 
       chartTotal.data.labels = labels;
       chartTotal.data.datasets[0].data = totals;
@@ -250,8 +256,8 @@
       chartLife.update();
 
       const last = items[items.length - 1];
-      document.getElementById('latestTotal').textContent = fmt(last.total);
-      document.getElementById('latestPnl').textContent   = (last.pnl >= 0 ? '+' : '') + fmt(last.pnl);
+      document.getElementById('latestTotal').textContent = fmt(Number(last.total)||0);
+      document.getElementById('latestPnl').textContent   = ((Number(last.pnl)||0) >= 0 ? '+' : '') + fmt(Number(last.pnl)||0);
       document.getElementById('updatedAt').textContent   = 'Updated: ' + new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
     }
 

@@ -10,37 +10,37 @@
   <style>
     /* ===== Cursor-following, color-shifting background ===== */
 
-  /* make a layer below content but above the page background */
-  header, main, footer { position: relative; z-index: 1; }
-  
-  /* smoothly animatable custom properties */
-  @property --hue { syntax: '<number>'; inherits: false; initial-value: 220; }
-  @property --x { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
-  @property --y { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
-  
-  #bg-spotlight {
-    position: fixed;
-    inset: -20vmax;
-    z-index: 0;
-    pointer-events: none;
-  
-    /* start values */
-    --hue: 220;
-    --x: 50%;
-    --y: 50%;
-  
-    /* multiring radial glow that follows the cursor */
-    background:
+    /* make a layer below content but above the page background */
+    header, main, footer { position: relative; z-index: 1; }
+    
+    /* smoothly animatable custom properties */
+    @property --hue { syntax: '<number>'; inherits: false; initial-value: 220; }
+    @property --x { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
+    @property --y { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
+    
+    #bg-spotlight {
+      position: fixed;
+      inset: -20vmax;
+      z-index: 0;
+      pointer-events: none;
+    
+      /* start values */
+      --hue: 220;
+      --x: 50%;
+      --y: 50%;
+    
+      /* multiring radial glow that follows the cursor */
+      background:
         radial-gradient(40vmax 40vmax at var(--x) var(--y),
           hsl(var(--hue) 90% 60% / 0.70) 0%,
           hsl(calc(var(--hue) + 40) 90% 60% / 0.45) 25%,
           hsl(calc(var(--hue) + 80) 90% 60% / 0.25) 45%,
-          transparent 65%)
-        ,
+          transparent 65%),
+        /* CHANGED: use srgb to avoid oklab mobile issues */
         radial-gradient(80vmax 80vmax at 50% 50%,
-          color-mix(in oklab, var(--brand), black 25%) 0%,
+          color-mix(in srgb, var(--brand) 75%, black 25%) 0%,
           transparent 60%);
-    
+      
       filter: blur(18px) saturate(1.1);
       transform: translateZ(0);
       transition: --x 180ms ease-out, --y 180ms ease-out;
@@ -61,10 +61,9 @@
     /* If your own toggle switches :root.light, mirror that explicitly, too */
     :root.light #bg-spotlight { mix-blend-mode: multiply; opacity: 0.65; }
     :root:not(.light) #bg-spotlight { mix-blend-mode: screen; opacity: 0.85; }
-    /* ... your existing #bg-spotlight { … }, theme blend rules, etc. ... */
 
-    /* Fallback for browsers that can't interpolate CSS vars in gradients */
-    @supports not (background: radial-gradient(closest-side at var(--x) var(--y), red, transparent)) {
+    /* Fallback for engines that can't position gradients with "at x y" safely */
+    @supports not (background: radial-gradient(closest-side at 10% 10%, red, transparent)) {
       #bg-spotlight { animation: none; filter: hue-rotate(0deg) blur(18px) saturate(1.1); }
       @keyframes hueSpin { to { filter: hue-rotate(360deg) blur(18px) saturate(1.1); } }
       #bg-spotlight { animation: hueSpin 12s linear infinite; }
@@ -79,15 +78,14 @@
             hsl(var(--hue) 90% 60% / .65) 0%,
             hsl(calc(var(--hue) + 40) 90% 60% / .35) 28%,
             transparent 60%),
+          /* CHANGED: use srgb here too */
           radial-gradient(60vmax 60vmax at 50% 50%,
-            color-mix(in oklab, var(--brand), black 25%) 0%,
+            color-mix(in srgb, var(--brand) 75%, black 25%) 0%,
             transparent 58%);
       }
     }
 
-
-    
-    /* Respect reduced motion */
+    /* Respect reduced motion — keep this last so it wins */
     @media (prefers-reduced-motion: reduce) {
       #bg-spotlight { animation: none; transition: none; }
     }
@@ -677,43 +675,56 @@
     // =================== YEAR ===================
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+
+  <!-- Spotlight script (with mobile hardening) -->
   <script>
-(() => {
-  const el = document.getElementById('bg-spotlight');
-  if (!el) return;
+  (() => {
+    const el = document.getElementById('bg-spotlight');
+    if (!el) return;
 
-  let raf = null, targetX = '50%', targetY = '50%';
+    let raf = null, targetX = '50%', targetY = '50%';
 
-  function setPos(x, y) {
-    targetX = x + 'px';
-    targetY = y + 'px';
-    if (raf) return;
-    raf = requestAnimationFrame(() => {
-      el.style.setProperty('--x', targetX);
-      el.style.setProperty('--y', targetY);
-      raf = null;
-    });
-  }
+    function setPos(x, y) {
+      targetX = x + 'px';
+      targetY = y + 'px';
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        el.style.setProperty('--x', targetX);
+        el.style.setProperty('--y', targetY);
+        raf = null;
+      });
+    }
 
-  // follow mouse / touch
-  window.addEventListener('pointermove', (e) => setPos(e.clientX, e.clientY), { passive: true });
+    // follow mouse / touch via Pointer Events
+    window.addEventListener('pointermove', (e) => setPos(e.clientX, e.clientY), { passive: true });
 
-  // subtle click "pop"
-  window.addEventListener('pointerdown', () => {
-    el.animate(
-      [{ filter: getComputedStyle(el).filter },
-       { filter: 'blur(10px) saturate(1.4)' },
-       { filter: getComputedStyle(el).filter }],
-      { duration: 220, easing: 'ease-out' }
-    );
-  }, { passive: true });
+    // fallback for browsers without PointerEvent
+    if (!('PointerEvent' in window)) {
+      const setFromTouch = (e) => {
+        const t = e.touches && e.touches[0];
+        if (t) setPos(t.clientX, t.clientY);
+      };
+      window.addEventListener('touchstart', setFromTouch, { passive: true });
+      window.addEventListener('touchmove', setFromTouch, { passive: true });
+    }
 
-  // center on load & on resize
-  function center() { setPos(innerWidth / 2, innerHeight / 2); }
-  addEventListener('resize', center);
-  center();
-})();
-</script>
+    // subtle click "pop" (guard animate support)
+    window.addEventListener('pointerdown', () => {
+      if (!el.animate) return;
+      el.animate(
+        [{ filter: getComputedStyle(el).filter },
+         { filter: 'blur(10px) saturate(1.4)' },
+         { filter: getComputedStyle(el).filter }],
+        { duration: 220, easing: 'ease-out' }
+      );
+    }, { passive: true });
+
+    // center on load & on resize
+    function center() { setPos(innerWidth / 2, innerHeight / 2); }
+    addEventListener('resize', center);
+    center();
+  })();
+  </script>
 
 </body>
 </html>

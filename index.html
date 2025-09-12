@@ -8,6 +8,65 @@
   <title>Asutosh Pattanayak — Portfolio</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>✨</text></svg>">
   <style>
+    /* ===== Cursor-following, color-shifting background ===== */
+
+  /* make a layer below content but above the page background */
+  header, main, footer { position: relative; z-index: 1; }
+  
+  /* smoothly animatable custom properties */
+  @property --hue { syntax: '<number>'; inherits: false; initial-value: 220; }
+  @property --x { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
+  @property --y { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
+  
+  #bg-spotlight {
+    position: fixed;
+    inset: -20vmax;
+    z-index: 0;
+    pointer-events: none;
+  
+    /* start values */
+    --hue: 220;
+    --x: 50%;
+    --y: 50%;
+  
+    /* multiring radial glow that follows the cursor */
+    background:
+        radial-gradient(40vmax 40vmax at var(--x) var(--y),
+          hsl(var(--hue) 90% 60% / 0.70) 0%,
+          hsl(calc(var(--hue) + 40) 90% 60% / 0.45) 25%,
+          hsl(calc(var(--hue) + 80) 90% 60% / 0.25) 45%,
+          transparent 65%)
+        ,
+        radial-gradient(80vmax 80vmax at 50% 50%,
+          color-mix(in oklab, var(--brand), black 25%) 0%,
+          transparent 60%);
+    
+      filter: blur(18px) saturate(1.1);
+      transform: translateZ(0);
+      transition: --x 180ms ease-out, --y 180ms ease-out;
+      animation: hueShift 12s linear infinite;
+    }
+    
+    /* cycle the hue continuously */
+    @keyframes hueShift { to { --hue: calc(var(--hue) + 360); } }
+    
+    /* Blend for contrast on each theme */
+    @media (prefers-color-scheme: dark) {
+      #bg-spotlight { mix-blend-mode: screen; opacity: 0.85; }
+    }
+    @media (prefers-color-scheme: light) {
+      #bg-spotlight { mix-blend-mode: multiply; opacity: 0.65; }
+    }
+    
+    /* If your own toggle switches :root.light, mirror that explicitly, too */
+    :root.light #bg-spotlight { mix-blend-mode: multiply; opacity: 0.65; }
+    :root:not(.light) #bg-spotlight { mix-blend-mode: screen; opacity: 0.85; }
+    
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      #bg-spotlight { animation: none; transition: none; }
+    }
+
     /* ------------------------------
        CSS RESET (modern, minimal)
     ------------------------------ */
@@ -240,6 +299,7 @@
   </style>
 </head>
 <body>
+  <div id="bg-spotlight" aria-hidden="true"></div>
   <div class="skip"><a href="#main">Skip to content</a></div>
 
   <!-- =================== NAV =================== -->
@@ -592,5 +652,43 @@
     // =================== YEAR ===================
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+  <script>
+(() => {
+  const el = document.getElementById('bg-spotlight');
+  if (!el) return;
+
+  let raf = null, targetX = '50%', targetY = '50%';
+
+  function setPos(x, y) {
+    targetX = x + 'px';
+    targetY = y + 'px';
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      el.style.setProperty('--x', targetX);
+      el.style.setProperty('--y', targetY);
+      raf = null;
+    });
+  }
+
+  // follow mouse / touch
+  window.addEventListener('pointermove', (e) => setPos(e.clientX, e.clientY), { passive: true });
+
+  // subtle click "pop"
+  window.addEventListener('pointerdown', () => {
+    el.animate(
+      [{ filter: getComputedStyle(el).filter },
+       { filter: 'blur(10px) saturate(1.4)' },
+       { filter: getComputedStyle(el).filter }],
+      { duration: 220, easing: 'ease-out' }
+    );
+  }, { passive: true });
+
+  // center on load & on resize
+  function center() { setPos(innerWidth / 2, innerHeight / 2); }
+  addEventListener('resize', center);
+  center();
+})();
+</script>
+
 </body>
 </html>

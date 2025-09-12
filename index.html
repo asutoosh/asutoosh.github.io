@@ -61,6 +61,31 @@
     /* If your own toggle switches :root.light, mirror that explicitly, too */
     :root.light #bg-spotlight { mix-blend-mode: multiply; opacity: 0.65; }
     :root:not(.light) #bg-spotlight { mix-blend-mode: screen; opacity: 0.85; }
+    /* ... your existing #bg-spotlight { … }, theme blend rules, etc. ... */
+
+    /* Fallback for browsers that can't interpolate CSS vars in gradients */
+    @supports not (background: radial-gradient(closest-side at var(--x) var(--y), red, transparent)) {
+      #bg-spotlight { animation: none; filter: hue-rotate(0deg) blur(18px) saturate(1.1); }
+      @keyframes hueSpin { to { filter: hue-rotate(360deg) blur(18px) saturate(1.1); } }
+      #bg-spotlight { animation: hueSpin 12s linear infinite; }
+    }
+    
+    /* Mobile perf tweak */
+    @media (max-width: 600px){
+      #bg-spotlight{
+        filter: blur(14px);
+        background:
+          radial-gradient(32vmax 32vmax at var(--x) var(--y),
+            hsl(var(--hue) 90% 60% / .65) 0%,
+            hsl(calc(var(--hue) + 40) 90% 60% / .35) 28%,
+            transparent 60%),
+          radial-gradient(60vmax 60vmax at 50% 50%,
+            color-mix(in oklab, var(--brand), black 25%) 0%,
+            transparent 58%);
+      }
+    }
+
+
     
     /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce) {

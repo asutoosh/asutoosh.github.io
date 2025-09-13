@@ -13,42 +13,82 @@
     /* make a layer below content but above the page background */
     header, main, footer { position: relative; z-index: 1; }
     
+    /* Feature detection for @property support */
+    .supports-custom-props {
+      --supports-properties: 1;
+    }
+
     /* smoothly animatable custom properties */
     @property --hue { syntax: '<number>'; inherits: false; initial-value: 220; }
     @property --x { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
     @property --y { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
-    
+
     #bg-spotlight {
       position: fixed;
       inset: -20vmax;
       z-index: 0;
       pointer-events: none;
-    
+
       /* start values */
       --hue: 220;
       --x: 50%;
       --y: 50%;
-    
-      /* multiring radial glow that follows the cursor */
+
+      /* Default background for browsers without @property support */
+      background:
+        radial-gradient(40vmax 40vmax at 50% 50%,
+          hsla(220, 90%, 60%, 0.70) 0%,
+          hsla(260, 90%, 60%, 0.45) 25%,
+          hsla(300, 90%, 60%, 0.25) 45%,
+          transparent 65%),
+        radial-gradient(80vmax 80vmax at 50% 50%,
+          rgba(102, 227, 255, 0.75) 0%,
+          transparent 60%);
+      
+      filter: blur(18px) saturate(1.1);
+      transform: translateZ(0);
+    }
+
+    /* Enhanced version for browsers with @property support */
+    .supports-custom-props #bg-spotlight {
       background:
         radial-gradient(40vmax 40vmax at var(--x) var(--y),
           hsl(var(--hue) 90% 60% / 0.70) 0%,
           hsl(calc(var(--hue) + 40) 90% 60% / 0.45) 25%,
           hsl(calc(var(--hue) + 80) 90% 60% / 0.25) 45%,
           transparent 65%),
-        /* CHANGED: use srgb to avoid oklab mobile issues */
         radial-gradient(80vmax 80vmax at 50% 50%,
           color-mix(in srgb, var(--brand) 75%, black 25%) 0%,
           transparent 60%);
-      
-      filter: blur(18px) saturate(1.1);
-      transform: translateZ(0);
       transition: --x 180ms ease-out, --y 180ms ease-out;
       animation: hueShift 12s linear infinite;
     }
-    
+
+    /* Fallback for engines that can't use @property */
+    .no-custom-props #bg-spotlight {
+      animation: hueSpin 12s linear infinite;
+    }
+
     /* cycle the hue continuously */
     @keyframes hueShift { to { --hue: calc(var(--hue) + 360); } }
+    @keyframes hueSpin { to { filter: hue-rotate(360deg) blur(18px) saturate(1.1); } }
+
+    /* Mobile perf tweak - simplified version */
+    @media (max-width: 600px) {
+      #bg-spotlight {
+        filter: blur(14px);
+        background:
+          radial-gradient(32vmax 32vmax at 50% 50%,
+            hsla(220, 90%, 60%, 0.65) 0%,
+            hsla(260, 90%, 60%, 0.35) 28%,
+            transparent 60%),
+          radial-gradient(60vmax 60vmax at 50% 50%,
+            rgba(102, 227, 255, 0.75) 0%,
+            transparent 58%);
+        animation: hueSpin 16s linear infinite;
+        transition: none;
+      }
+    }
     
     /* Blend for contrast on each theme */
     @media (prefers-color-scheme: dark) {
@@ -61,29 +101,6 @@
     /* If your own toggle switches :root.light, mirror that explicitly, too */
     :root.light #bg-spotlight { mix-blend-mode: multiply; opacity: 0.65; }
     :root:not(.light) #bg-spotlight { mix-blend-mode: screen; opacity: 0.85; }
-
-    /* Fallback for engines that can't position gradients with "at x y" safely */
-    @supports not (background: radial-gradient(closest-side at 10% 10%, red, transparent)) {
-      #bg-spotlight { animation: none; filter: hue-rotate(0deg) blur(18px) saturate(1.1); }
-      @keyframes hueSpin { to { filter: hue-rotate(360deg) blur(18px) saturate(1.1); } }
-      #bg-spotlight { animation: hueSpin 12s linear infinite; }
-    }
-    
-    /* Mobile perf tweak */
-    @media (max-width: 600px){
-      #bg-spotlight{
-        filter: blur(14px);
-        background:
-          radial-gradient(32vmax 32vmax at var(--x) var(--y),
-            hsl(var(--hue) 90% 60% / .65) 0%,
-            hsl(calc(var(--hue) + 40) 90% 60% / .35) 28%,
-            transparent 60%),
-          /* CHANGED: use srgb here too */
-          radial-gradient(60vmax 60vmax at 50% 50%,
-            color-mix(in srgb, var(--brand) 75%, black 25%) 0%,
-            transparent 58%);
-      }
-    }
 
     /* Respect reduced motion — keep this last so it wins */
     @media (prefers-reduced-motion: reduce) {
@@ -676,9 +693,34 @@
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
+  <!-- Feature detection for CSS @property -->
+  <script>
+  // Feature detection for CSS @property
+  (function() {
+    try {
+      // Test if @property is supported
+      if (CSS && CSS.registerProperty) {
+        document.documentElement.classList.add('supports-custom-props');
+      } else {
+        document.documentElement.classList.add('no-custom-props');
+      }
+    } catch (e) {
+      document.documentElement.classList.add('no-custom-props');
+    }
+  })();
+  </script>
+
   <!-- Spotlight script (with mobile hardening) -->
   <script>
   (() => {
+    // Don't apply cursor-following effect on mobile devices
+    const isMobile = window.matchMedia('(max-width: 600px)').matches;
+    if (isMobile) return;
+
+    // Check if we have @property support
+    const hasCustomProps = document.documentElement.classList.contains('supports-custom-props');
+    if (!hasCustomProps) return;
+
     const el = document.getElementById('bg-spotlight');
     if (!el) return;
 

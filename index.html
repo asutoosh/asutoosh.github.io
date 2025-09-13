@@ -8,103 +8,70 @@
   <title>Asutosh Pattanayak — Portfolio</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>✨</text></svg>">
   <style>
-    /* ===== Cursor-following, color-shifting background ===== */
+    /* ===== Cursor-following gradient background ===== */
 
     /* make a layer below content but above the page background */
     header, main, footer { position: relative; z-index: 1; }
-    
-    /* Feature detection for @property support */
-    .supports-custom-props {
-      --supports-properties: 1;
-    }
-
-    /* smoothly animatable custom properties */
-    @property --hue { syntax: '<number>'; inherits: false; initial-value: 220; }
-    @property --x { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
-    @property --y { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
 
     #bg-spotlight {
       position: fixed;
-      inset: -20vmax;
+      inset: 0;
       z-index: 0;
       pointer-events: none;
-
-      /* start values */
-      --hue: 220;
-      --x: 50%;
-      --y: 50%;
-
-      /* Default background for browsers without @property support */
-      background:
-        radial-gradient(40vmax 40vmax at 50% 50%,
-          hsla(220, 90%, 60%, 0.70) 0%,
-          hsla(260, 90%, 60%, 0.45) 25%,
-          hsla(300, 90%, 60%, 0.25) 45%,
-          transparent 65%),
-        radial-gradient(80vmax 80vmax at 50% 50%,
-          rgba(102, 227, 255, 0.75) 0%,
-          transparent 60%);
       
-      filter: blur(18px) saturate(1.1);
-      transform: translateZ(0);
+      /* Cursor-following gradient effect */
+      background: radial-gradient(600px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+        rgba(102, 227, 255, 0.15), 
+        rgba(174, 123, 255, 0.1) 40%, 
+        transparent 70%);
+      
+      transition: opacity 0.3s ease;
+      opacity: 0.8;
     }
 
-    /* Enhanced version for browsers with @property support */
-    .supports-custom-props #bg-spotlight {
-      background:
-        radial-gradient(40vmax 40vmax at var(--x) var(--y),
-          hsl(var(--hue) 90% 60% / 0.70) 0%,
-          hsl(calc(var(--hue) + 40) 90% 60% / 0.45) 25%,
-          hsl(calc(var(--hue) + 80) 90% 60% / 0.25) 45%,
-          transparent 65%),
-        radial-gradient(80vmax 80vmax at 50% 50%,
-          color-mix(in srgb, var(--brand) 75%, black 25%) 0%,
-          transparent 60%);
-      transition: --x 180ms ease-out, --y 180ms ease-out;
-      animation: hueShift 12s linear infinite;
+    /* Additional ambient gradients */
+    #bg-spotlight::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(800px at calc(var(--mouse-x, 50%) + 200px) calc(var(--mouse-y, 50%) - 100px), 
+          rgba(174, 123, 255, 0.08), 
+          transparent 60%),
+        radial-gradient(1000px at calc(var(--mouse-x, 50%) - 300px) calc(var(--mouse-y, 50%) + 200px), 
+          rgba(102, 227, 255, 0.06), 
+          transparent 50%);
+      opacity: 0.7;
     }
 
-    /* Fallback for engines that can't use @property */
-    .no-custom-props #bg-spotlight {
-      animation: hueSpin 12s linear infinite;
-    }
-
-    /* cycle the hue continuously */
-    @keyframes hueShift { to { --hue: calc(var(--hue) + 360); } }
-    @keyframes hueSpin { to { filter: hue-rotate(360deg) blur(18px) saturate(1.1); } }
-
-    /* Mobile perf tweak - simplified version */
-    @media (max-width: 600px) {
-      #bg-spotlight {
-        filter: blur(14px);
-        background:
-          radial-gradient(32vmax 32vmax at 50% 50%,
-            hsla(220, 90%, 60%, 0.65) 0%,
-            hsla(260, 90%, 60%, 0.35) 28%,
-            transparent 60%),
-          radial-gradient(60vmax 60vmax at 50% 50%,
-            rgba(102, 227, 255, 0.75) 0%,
-            transparent 58%);
-        animation: hueSpin 16s linear infinite;
-        transition: none;
-      }
-    }
-    
-    /* Blend for contrast on each theme */
+    /* Theme-specific adjustments */
     @media (prefers-color-scheme: dark) {
-      #bg-spotlight { mix-blend-mode: screen; opacity: 0.85; }
+      #bg-spotlight { opacity: 0.9; }
+      #bg-spotlight::before { opacity: 0.8; }
     }
     @media (prefers-color-scheme: light) {
-      #bg-spotlight { mix-blend-mode: multiply; opacity: 0.65; }
+      #bg-spotlight { opacity: 0.5; }
+      #bg-spotlight::before { opacity: 0.4; }
     }
     
-    /* If your own toggle switches :root.light, mirror that explicitly, too */
-    :root.light #bg-spotlight { mix-blend-mode: multiply; opacity: 0.65; }
-    :root:not(.light) #bg-spotlight { mix-blend-mode: screen; opacity: 0.85; }
+    :root.light #bg-spotlight { opacity: 0.5; }
+    :root.light #bg-spotlight::before { opacity: 0.4; }
+    :root:not(.light) #bg-spotlight { opacity: 0.9; }
+    :root:not(.light) #bg-spotlight::before { opacity: 0.8; }
 
-    /* Respect reduced motion — keep this last so it wins */
-    @media (prefers-reduced-motion: reduce) {
-      #bg-spotlight { animation: none; transition: none; }
+    /* Disable on mobile for performance */
+    @media (max-width: 768px) {
+      #bg-spotlight {
+        background: radial-gradient(600px at 50% 50%, 
+          rgba(102, 227, 255, 0.1), 
+          rgba(174, 123, 255, 0.05) 40%, 
+          transparent 70%);
+      }
+      #bg-spotlight::before {
+        background: radial-gradient(800px at 70% 30%, 
+          rgba(174, 123, 255, 0.06), 
+          transparent 60%);
+      }
     }
 
     /* ------------------------------
@@ -130,8 +97,8 @@
       --brand-2:#ae7bff;
       --ok:#22c55e;
       --warn:#f59e0b;
-      --ring: color-mix(in oklch, var(--brand), white 20%);
-      --border: color-mix(in oklch, var(--text), black 85%);
+      --ring: rgba(102, 227, 255, 0.8);
+      --border: rgba(230, 234, 240, 0.15);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius: 14px;
       --radius-sm: 10px;
@@ -149,7 +116,7 @@
       --muted:#475569;
       --brand:#2563eb;
       --brand-2:#9333ea;
-      --border: color-mix(in oklch, var(--text), white 80%);
+      --border: rgba(15, 23, 42, 0.2);
       --shadow: 0 10px 30px rgba(0,0,0,.1);
     }
 
@@ -157,8 +124,8 @@
        BASE LAYOUT
     ------------------------------ */
     body{
-      background: radial-gradient(1200px 600px at 90% -10%, color-mix(in oklch, var(--brand) 30%, transparent), transparent 70%),
-                  radial-gradient(900px 500px at -10% 20%, color-mix(in oklch, var(--brand-2) 24%, transparent), transparent 60%),
+      background: radial-gradient(1200px 600px at 90% -10%, rgba(102, 227, 255, 0.3), transparent 70%),
+                  radial-gradient(900px 500px at -10% 20%, rgba(174, 123, 255, 0.24), transparent 60%),
                   var(--bg);
       color:var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
@@ -167,7 +134,7 @@
     .container{width: min(100% - 2*var(--gap), var(--maxw)); margin-inline:auto}
     section{padding-block: clamp(56px, 9vw, 96px)}
     .panel{
-      background:linear-gradient(180deg, color-mix(in oklch, var(--panel), transparent 15%), var(--panel));
+      background:linear-gradient(180deg, rgba(17, 18, 24, 0.85), var(--panel));
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow: var(--shadow);
@@ -180,7 +147,7 @@
     .skip a:focus{position:fixed;left:var(--gap);top:var(--gap);width:auto;height:auto;background:var(--panel);padding:.6rem 1rem;border-radius:10px;border:1px solid var(--border);z-index:999}
     header{
       position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(10px);
-      background: color-mix(in oklch, var(--bg) 85%, transparent);
+      background: rgba(11, 12, 16, 0.85);
       border-bottom:1px solid var(--border);
     }
     .nav{
@@ -198,7 +165,7 @@
     }
     nav ul{display:flex; gap:18px; list-style:none}
     nav a{opacity:.85; text-decoration:none; padding:.45rem .7rem; border-radius:10px}
-    nav a:hover, nav a:focus-visible{opacity:1; outline:none; background: color-mix(in oklch, var(--panel), transparent 50%); box-shadow: inset 0 0 0 1px var(--border)}
+    nav a:hover, nav a:focus-visible{opacity:1; outline:none; background: rgba(17, 18, 24, 0.5); box-shadow: inset 0 0 0 1px var(--border)}
     .actions{display:flex; align-items:center; gap:10px}
     .btn, button[role="switch"]{
       border:1px solid var(--border); background:var(--panel); color:var(--text);
@@ -233,17 +200,17 @@
     }
     .hero .card{padding: clamp(18px, 2.4vw, 28px)}
     .hero-cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
-    .tagline{display:inline-flex; align-items:center; gap:8px; padding:.35rem .6rem; border-radius:999px; border:1px solid var(--border); background: color-mix(in oklch, var(--panel), transparent 35%); font-size:.9rem; color:var(--muted); margin-bottom:10px}
+    .tagline{display:inline-flex; align-items:center; gap:8px; padding:.35rem .6rem; border-radius:999px; border:1px solid var(--border); background: rgba(17, 18, 24, 0.65); font-size:.9rem; color:var(--muted); margin-bottom:10px}
     .avatar{
       aspect-ratio:1/1; border-radius:22px; overflow:hidden; position:relative; isolation:isolate;
       background:
-        radial-gradient(800px 400px at 120% -20%, color-mix(in oklch, var(--brand) 30%, transparent), transparent 60%),
-        linear-gradient(135deg, color-mix(in oklch, var(--panel), transparent 25%), var(--panel));
+        radial-gradient(800px 400px at 120% -20%, rgba(102, 227, 255, 0.3), transparent 60%),
+        linear-gradient(135deg, rgba(17, 18, 24, 0.75), var(--panel));
       border:1px solid var(--border);
     }
     .avatar::after{
       content:""; position:absolute; inset:auto -30% 8% -30%; height:48%;
-      background:radial-gradient(closest-side, color-mix(in oklch, var(--brand-2) 40%, transparent), transparent);
+      background:radial-gradient(closest-side, rgba(174, 123, 255, 0.4), transparent);
       filter:blur(30px); opacity:.7; z-index:-1;
     }
     .avatar .placeholder{
@@ -269,12 +236,12 @@
 
     .card{
       border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--panel); box-shadow:var(--shadow);
-      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      transition: border-color .25s ease;
     }
-    .card:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.35); border-color: color-mix(in oklch, var(--brand), var(--border) 50%)}
+    .card:hover{ border-color: rgba(102, 227, 255, 0.5)}
     .thumb{aspect-ratio: 16/10; background:
-        radial-gradient(600px 300px at 120% -30%, color-mix(in oklch, var(--brand) 18%, transparent), transparent 60%),
-        radial-gradient(600px 300px at -20% 120%, color-mix(in oklch, var(--brand-2) 18%, transparent), transparent 60%),
+        radial-gradient(600px 300px at 120% -30%, rgba(102, 227, 255, 0.18), transparent 60%),
+        radial-gradient(600px 300px at -20% 120%, rgba(174, 123, 255, 0.18), transparent 60%),
         linear-gradient(135deg, #1b1f2a, #141824);
       border-bottom:1px solid var(--border);
       display:grid; place-items:center; color:#dbeafe; font-weight:800; letter-spacing:.6px
@@ -290,8 +257,8 @@
        SKILLS
     ------------------------------ */
     .skillset{display:flex; flex-wrap:wrap; gap:10px}
-    .pill{padding:.5rem .7rem; border-radius:999px; border:1px solid var(--border); background: color-mix(in oklch, var(--panel), transparent 45%)}
-    .meter{height:8px; background:color-mix(in oklch, var(--panel), black 6%); border:1px solid var(--border); border-radius:999px; overflow:hidden}
+    .pill{padding:.5rem .7rem; border-radius:999px; border:1px solid var(--border); background: rgba(17, 18, 24, 0.55)}
+    .meter{height:8px; background: rgba(17, 18, 24, 0.94); border:1px solid var(--border); border-radius:999px; overflow:hidden}
     .meter > i{display:block; height:100%; background:linear-gradient(90deg, var(--brand), var(--brand-2))}
 
     /* ------------------------------
@@ -300,7 +267,7 @@
     .timeline{position:relative; padding-left:24px}
     .timeline::before{content:""; position:absolute; left:4px; top:4px; bottom:4px; width:2px; background: linear-gradient(var(--brand), var(--brand-2)); opacity:.5}
     .t-item{position:relative; margin-bottom:18px}
-    .t-item::before{content:""; position:absolute; left:-2px; top:.35rem; width:10px; height:10px; border-radius:50%; background:var(--brand); box-shadow:0 0 0 3px color-mix(in oklch, var(--brand), transparent 70%)}
+    .t-item::before{content:""; position:absolute; left:-2px; top:.35rem; width:10px; height:10px; border-radius:50%; background:var(--brand); box-shadow:0 0 0 3px rgba(102, 227, 255, 0.3)}
 
     /* ------------------------------
        CONTACT
@@ -308,7 +275,7 @@
     form{display:grid; gap:12px}
     .field{display:grid; gap:6px}
     input, textarea{
-      background: color-mix(in oklch, var(--panel), transparent 35%);
+      background: rgba(17, 18, 24, 0.65);
       border:1px solid var(--border); border-radius:12px; padding:.7rem .9rem; color:var(--text)
     }
     input:focus, textarea:focus{outline:2px solid var(--ring); outline-offset:2px}
@@ -317,13 +284,13 @@
     .note{color:var(--muted); font-size:.95rem}
 
     /* ------------------------------
-       REVEAL ANIMATIONS
+       REVEAL ANIMATIONS (Simplified)
     ------------------------------ */
-    [data-animate]{opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease}
-    [data-animate].in{opacity:1; transform:none}
+    [data-animate]{opacity:0; transition: opacity 0.5s ease}
+    [data-animate].in{opacity:1}
     @media (prefers-reduced-motion: reduce){
       html:focus-within{scroll-behavior:auto}
-      [data-animate]{opacity:1 !important; transform:none !important; transition:none !important}
+      [data-animate]{opacity:1 !important; transition:none !important}
       .card, .card:hover{transform:none !important}
     }
 
@@ -389,7 +356,8 @@
         </div>
       </div>
       <div class="avatar panel card" aria-label="Profile photo">
-        <img src="https://i.postimg.cc/C1fyZGtd/Picsart-23-09-22-14-36-33-589.jpg" alt="Asutosh Pattanayak">
+        <img src="https://i.postimg.cc/C1fyZGtd/Picsart-23-09-22-14-36-33-589.jpg" alt="Asutosh Pattanayak" onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='grid';">
+        <div class="placeholder" style="display:none;">AP</div>
       </div>
 
     </section>
@@ -616,6 +584,8 @@
     (function(){
       const root = document.documentElement;
       const toggle = document.getElementById('themeToggle');
+      if (!toggle) return; // Exit if toggle doesn't exist
+      
       const saved = localStorage.getItem('theme');
       const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
 
@@ -631,7 +601,10 @@
     // =================== MOBILE NAV ===================
     (function(){
       const btn = document.querySelector('.hamburger');
+      if (!btn) return; // Exit if hamburger button doesn't exist
+      
       const nav = document.getElementById('site-nav');
+      if (!nav) return; // Exit if nav doesn't exist
       btn.addEventListener('click', ()=>{
         const open = nav.classList.toggle('open');
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -645,6 +618,8 @@
     // =================== REVEAL ON SCROLL ===================
     (function(){
       const els = document.querySelectorAll('[data-animate]');
+      if (!els.length) return; // Exit if no elements to animate
+      
       const io = new IntersectionObserver((entries)=>{
         for(const e of entries){
           if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
@@ -656,6 +631,8 @@
     // =================== CONTACT FORM (mailto + validation) ===================
     (function(){
       const form = document.getElementById('contactForm');
+      if (!form) return; // Exit if form doesn't exist
+      
       const note = document.getElementById('formNote');
       const copyBtn = document.getElementById('copyEmail');
       const emailAddr = 'asutoshpattanayak806@gmail.com'; // change this
@@ -690,81 +667,63 @@
     })();
 
     // =================== YEAR ===================
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-
-  <!-- Feature detection for CSS @property -->
-  <script>
-  // Feature detection for CSS @property
-  (function() {
-    try {
-      // Test if @property is supported
-      if (CSS && CSS.registerProperty) {
-        document.documentElement.classList.add('supports-custom-props');
-      } else {
-        document.documentElement.classList.add('no-custom-props');
-      }
-    } catch (e) {
-      document.documentElement.classList.add('no-custom-props');
+    const yearElement = document.getElementById('year');
+    if (yearElement) {
+      yearElement.textContent = new Date().getFullYear();
     }
-  })();
   </script>
 
-  <!-- Spotlight script (with mobile hardening) -->
+  <!-- Cursor-following background effect -->
   <script>
-  (() => {
-    // Don't apply cursor-following effect on mobile devices
-    const isMobile = window.matchMedia('(max-width: 600px)').matches;
+  (function() {
+    // Only run on desktop devices for performance
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                     (window.matchMedia && window.matchMedia('(max-width: 768px)').matches);
+    
     if (isMobile) return;
 
-    // Check if we have @property support
-    const hasCustomProps = document.documentElement.classList.contains('supports-custom-props');
-    if (!hasCustomProps) return;
+    const spotlight = document.getElementById('bg-spotlight');
+    if (!spotlight) return;
 
-    const el = document.getElementById('bg-spotlight');
-    if (!el) return;
+    let mouseX = 0;
+    let mouseY = 0;
+    let isAnimating = false;
 
-    let raf = null, targetX = '50%', targetY = '50%';
-
-    function setPos(x, y) {
-      targetX = x + 'px';
-      targetY = y + 'px';
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        el.style.setProperty('--x', targetX);
-        el.style.setProperty('--y', targetY);
-        raf = null;
-      });
+    // Throttled mouse tracking for better performance
+    function updateMousePosition(e) {
+      mouseX = (e.clientX / window.innerWidth) * 100;
+      mouseY = (e.clientY / window.innerHeight) * 100;
+      
+      if (!isAnimating) {
+        isAnimating = true;
+        requestAnimationFrame(updateBackground);
+      }
     }
 
-    // follow mouse / touch via Pointer Events
-    window.addEventListener('pointermove', (e) => setPos(e.clientX, e.clientY), { passive: true });
-
-    // fallback for browsers without PointerEvent
-    if (!('PointerEvent' in window)) {
-      const setFromTouch = (e) => {
-        const t = e.touches && e.touches[0];
-        if (t) setPos(t.clientX, t.clientY);
-      };
-      window.addEventListener('touchstart', setFromTouch, { passive: true });
-      window.addEventListener('touchmove', setFromTouch, { passive: true });
+    function updateBackground() {
+      if (spotlight) {
+        spotlight.style.setProperty('--mouse-x', mouseX + '%');
+        spotlight.style.setProperty('--mouse-y', mouseY + '%');
+      }
+      isAnimating = false;
     }
 
-    // subtle click "pop" (guard animate support)
-    window.addEventListener('pointerdown', () => {
-      if (!el.animate) return;
-      el.animate(
-        [{ filter: getComputedStyle(el).filter },
-         { filter: 'blur(10px) saturate(1.4)' },
-         { filter: getComputedStyle(el).filter }],
-        { duration: 220, easing: 'ease-out' }
-      );
-    }, { passive: true });
+    // Add mouse move listener with throttling
+    let throttleTimer = null;
+    document.addEventListener('mousemove', function(e) {
+      if (throttleTimer) return;
+      
+      throttleTimer = setTimeout(function() {
+        updateMousePosition(e);
+        throttleTimer = null;
+      }, 16); // ~60fps
+    });
 
-    // center on load & on resize
-    function center() { setPos(innerWidth / 2, innerHeight / 2); }
-    addEventListener('resize', center);
-    center();
+    // Initialize position at center
+    mouseX = 50;
+    mouseY = 50;
+    updateBackground();
+
   })();
   </script>
 

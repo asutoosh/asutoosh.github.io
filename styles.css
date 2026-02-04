@@ -355,6 +355,27 @@ nav a:focus-visible {
   gap: var(--space-xs);
 }
 
+.project-thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: var(--space-xs);
+}
+
+.project-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition);
+}
+
+.project-card:hover .project-thumbnail img {
+  transform: scale(1.05);
+}
+
 .project-links {
   display: flex;
   gap: var(--space-sm);

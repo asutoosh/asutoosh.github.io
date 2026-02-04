@@ -310,7 +310,7 @@ nav a:focus-visible {
 
 /* =================== HERO =================== */
 .hero {
-  min-height: 80vh;
+  padding-block: var(--space-3xl);
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Thoughts & Stories</title>
+  <meta name="description" content="Thoughts, stories, and insights on tech, automation, and building stuff.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .blog-hero {
+      text-align: center;
+      padding: 4rem 0 2rem;
+    }
+    
+    .blog-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .blog-hero .lead {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .blog-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+    
+    .blog-card-tag {
+      background: var(--surface);
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    
+    .blog-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+    
+    .blog-card p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .blog-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .read-time {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+    
+    .read-more {
+      color: var(--accent);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-state p {
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="container nav" aria-label="Main navigation">
+      <a href="index.html" class="logo">Asutosh</a>
+      
+      <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#stack">Stack</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html" class="active">Blog</a></li>
+        <li><a href="pnl.html">PnL</a></li>
+      </ul>
+
+      <button class="theme-toggle" aria-label="Toggle theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- BLOG HERO -->
+    <section class="container blog-hero">
+      <h1>Blog</h1>
+      <p class="lead">
+        Thoughts, stories, and insights on tech, automation, and building stuff.
+      </p>
+    </section>
+
+    <!-- BLOG GRID -->
+    <section class="container">
+      <div class="blog-grid">
+        
+        <!-- Blog Post 1: About Me Story -->
+        <a href="blog-about.html" class="blog-card">
+          <div class="blog-card-meta">
+            <span class="blog-card-tag">Story</span>
+            <span>Feb 13, 2026</span>
+          </div>
+          <h3>Who am I and how did I get here?</h3>
+          <p>
+            A story of gambling site freebies, YouTube comment bots, forex losses, 
+            and building things that mostly fail. The unfiltered journey from zero to... well, still figuring that out.
+          </p>
+          <div class="blog-card-footer">
+            <span class="read-time">5 min read</span>
+            <span class="read-more">
+              Read more →
+            </span>
+          </div>
+        </a>
+
+        <!-- More blog posts will be added here -->
+        
+      </div>
+
+      <!-- Empty State (uncomment when you have more posts) -->
+      <!-- <div class="empty-state">
+        <h3>More coming soon...</h3>
+        <p>
+          I'm working on more posts about automation, AI tools, trading bots, 
+          and the random stuff I build. Check back soon!
+        </p>
+        <a href="index.html" class="btn btn-primary">Back to Home</a>
+      </div> -->
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p class="muted">
+        &copy; <span id="year"></span> Asutosh Pattanayak. Built with HTML, CSS, and vibes.
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

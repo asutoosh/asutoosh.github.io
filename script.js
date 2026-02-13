@@ -12,25 +12,125 @@
   const saved = localStorage.getItem('theme');
   const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
   
-  function setTheme(mode) {
-    if (mode === 'light') {
-      root.classList.add('light');
-      toggle.setAttribute('aria-checked', 'true');
-      toggle.textContent = '☀️';
+  let overlay = null;
+  let circle = null;
+  
+  // Initialize overlay after DOM is ready
+  function createOverlay() {
+    if (overlay) return;
+    
+    overlay = document.createElement('div');
+    overlay.className = 'theme-transition-overlay';
+    
+    circle = document.createElement('div');
+    circle.className = 'theme-circle';
+    
+    overlay.appendChild(circle);
+    document.body.appendChild(overlay);
+  }
+  
+  function setTheme(mode, animated = false, clickX = 0, clickY = 0) {
+    if (animated) {
+      // Check if user prefers reduced motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      if (!prefersReducedMotion) {
+        createOverlay();
+        
+        // Calculate the maximum distance to cover the entire screen
+        const maxDistance = Math.hypot(
+          Math.max(clickX, window.innerWidth - clickX),
+          Math.max(clickY, window.innerHeight - clickY)
+        );
+        
+        const size = maxDistance * 2.5;
+        
+        // Reset circle
+        circle.style.cssText = `
+          position: absolute;
+          left: ${clickX}px;
+          top: ${clickY}px;
+          width: ${size}px;
+          height: ${size}px;
+          background: ${mode === 'light' ? '#ffffff' : '#0a0a0a'};
+          border-radius: 50%;
+          transform: translate(-50%, -50%) scale(0);
+          transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        `;
+        
+        // Show overlay
+        overlay.style.opacity = '1';
+        
+        // Force reflow to ensure initial state is applied
+        void circle.offsetWidth;
+        
+        // Trigger animation
+        requestAnimationFrame(() => {
+          circle.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+        
+        // Apply theme change during animation
+        setTimeout(() => {
+          if (mode === 'light') {
+            root.classList.add('light');
+            toggle.setAttribute('aria-checked', 'true');
+            toggle.textContent = '☀️';
+          } else {
+            root.classList.remove('light');
+            toggle.setAttribute('aria-checked', 'false');
+            toggle.textContent = '🌙';
+          }
+          localStorage.setItem('theme', mode);
+        }, 400);
+        
+        // Hide overlay after animation
+        setTimeout(() => {
+          overlay.style.opacity = '0';
+        }, 800);
+        
+        // Reset for next animation
+        setTimeout(() => {
+          circle.style.transform = 'translate(-50%, -50%) scale(0)';
+        }, 1000);
+      } else {
+        // Instant theme change for reduced motion preference
+        if (mode === 'light') {
+          root.classList.add('light');
+          toggle.setAttribute('aria-checked', 'true');
+          toggle.textContent = '☀️';
+        } else {
+          root.classList.remove('light');
+          toggle.setAttribute('aria-checked', 'false');
+          toggle.textContent = '🌙';
+        }
+        localStorage.setItem('theme', mode);
+      }
     } else {
-      root.classList.remove('light');
-      toggle.setAttribute('aria-checked', 'false');
-      toggle.textContent = '🌙';
+      // Initial theme set (no animation)
+      if (mode === 'light') {
+        root.classList.add('light');
+        toggle.setAttribute('aria-checked', 'true');
+        toggle.textContent = '☀️';
+      } else {
+        root.classList.remove('light');
+        toggle.setAttribute('aria-checked', 'false');
+        toggle.textContent = '🌙';
+      }
+      localStorage.setItem('theme', mode);
     }
-    localStorage.setItem('theme', mode);
   }
   
   // Initialize theme
-  setTheme(saved ?? (prefersLight ? 'light' : 'dark'));
+  setTheme(saved ?? (prefersLight ? 'light' : 'dark'), false);
   
-  // Toggle on click
-  toggle.addEventListener('click', () => {
-    setTheme(root.classList.contains('light') ? 'dark' : 'light');
+  // Toggle on click with animation
+  toggle.addEventListener('click', (e) => {
+    const rect = toggle.getBoundingClientRect();
+    const clickX = rect.left + rect.width / 2;
+    const clickY = rect.top + rect.height / 2;
+    
+    const newMode = root.classList.contains('light') ? 'dark' : 'light';
+    setTheme(newMode, true, clickX, clickY);
   });
 })();
 

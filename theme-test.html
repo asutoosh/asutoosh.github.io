@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Toggle Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --text: #e4e4e7;
+      --accent: #3b82f6;
+    }
+
+    :root.light {
+      --bg: #ffffff;
+      --text: #18181b;
+      --accent: #2563eb;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      font-size: 2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Theme transition overlay */
+    .theme-transition-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .instructions {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 0.75rem;
+      max-width: 600px;
+    }
+
+    .instructions h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .instructions ul {
+      text-align: left;
+      list-style-position: inside;
+    }
+
+    .instructions li {
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌓 Theme Toggle Test</h1>
+    <p>Click the button below to see the circular transition animation!</p>
+    
+    <button id="themeToggle" class="btn">
+      🌙
+    </button>
+
+    <div class="instructions">
+      <h2>What to expect:</h2>
+      <ul>
+        <li>✨ A circular shape expands from the button</li>
+        <li>⚪ White circle for light mode, black for dark mode</li>
+        <li>🌊 Smooth 800ms animation with easing</li>
+        <li>🎯 Circle originates from button center</li>
+        <li>💫 Theme changes mid-animation</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    
+    let overlay = null;
+    let circle = null;
+    
+    // Initialize overlay
+    function createOverlay() {
+      if (overlay) return;
+      
+      overlay = document.createElement('div');
+      overlay.className = 'theme-transition-overlay';
+      
+      circle = document.createElement('div');
+      circle.className = 'theme-circle';
+      
+      overlay.appendChild(circle);
+      document.body.appendChild(overlay);
+    }
+    
+    function setTheme(mode, animated = false, clickX = 0, clickY = 0) {
+      if (animated) {
+        createOverlay();
+        
+        // Calculate the maximum distance to cover the entire screen
+        const maxDistance = Math.hypot(
+          Math.max(clickX, window.innerWidth - clickX),
+          Math.max(clickY, window.innerHeight - clickY)
+        );
+        
+        const size = maxDistance * 2.5;
+        
+        // Reset circle
+        circle.style.cssText = `
+          position: absolute;
+          left: ${clickX}px;
+          top: ${clickY}px;
+          width: ${size}px;
+          height: ${size}px;
+          background: ${mode === 'light' ? '#ffffff' : '#0a0a0a'};
+          border-radius: 50%;
+          transform: translate(-50%, -50%) scale(0);
+          transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        `;
+        
+        // Show overlay
+        overlay.style.opacity = '1';
+        
+        // Force reflow
+        void circle.offsetWidth;
+        
+        // Trigger animation
+        requestAnimationFrame(() => {
+          circle.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+        
+        // Apply theme change during animation
+        setTimeout(() => {
+          if (mode === 'light') {
+            root.classList.add('light');
+            toggle.textContent = '☀️';
+          } else {
+            root.classList.remove('light');
+            toggle.textContent = '🌙';
+          }
+        }, 400);
+        
+        // Hide overlay after animation
+        setTimeout(() => {
+          overlay.style.opacity = '0';
+        }, 800);
+        
+        // Reset for next animation
+        setTimeout(() => {
+          circle.style.transform = 'translate(-50%, -50%) scale(0)';
+        }, 1000);
+      } else {
+        // Instant theme change
+        if (mode === 'light') {
+          root.classList.add('light');
+          toggle.textContent = '☀️';
+        } else {
+          root.classList.remove('light');
+          toggle.textContent = '🌙';
+        }
+      }
+    }
+    
+    // Initialize with dark theme
+    setTheme('dark', false);
+    
+    // Toggle on click with animation
+    toggle.addEventListener('click', (e) => {
+      const rect = toggle.getBoundingClientRect();
+      const clickX = rect.left + rect.width / 2;
+      const clickY = rect.top + rect.height / 2;
+      
+      const newMode = root.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newMode, true, clickX, clickY);
+    });
+  </script>
+</body>
+</html>

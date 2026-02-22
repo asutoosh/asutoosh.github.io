@@ -238,29 +238,109 @@
   }
 })();
 
-// =================== SPLINE 3D LOADING ===================
-(function initSpline3D() {
-  const splineViewer = document.querySelector('spline-viewer');
-  const hero3d = document.querySelector('.hero-3d');
+// =================== THREE.JS PARTICLES BACKGROUND ===================
+(function initParticles() {
+  const canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
 
-  if (!splineViewer || !hero3d) return;
-
-  // Hide on low-power devices or when data saver is on
-  const isLowPowerDevice = window.navigator.hardwareConcurrency <= 2;
-  const isDataSaverEnabled = window.navigator.connection && window.navigator.connection.saveData;
-
-  if (isLowPowerDevice || isDataSaverEnabled) {
-    hero3d.style.display = 'none';
+  // Skip on reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    canvas.style.display = 'none';
     return;
   }
 
-  // Add loading class when scene starts loading
-  splineViewer.addEventListener('load', () => {
-    hero3d.classList.add('loaded');
+  // Skip on mobile/low-power
+  if (window.navigator.hardwareConcurrency <= 2 ||
+      (window.navigator.connection && window.navigator.connection.saveData)) {
+    canvas.style.display = 'none';
+    return;
+  }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Create particles
+  const particleCount = window.innerWidth < 768 ? 50 : 150;
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const velocities = [];
+
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 10;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    velocities.push({
+      x: (Math.random() - 0.5) * 0.01,
+      y: (Math.random() - 0.5) * 0.01,
+      z: (Math.random() - 0.5) * 0.01
+    });
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  // Accent color from CSS variable
+  const isDark = !document.documentElement.classList.contains('light');
+  const particleColor = isDark ? 0x3b82f6 : 0x2563eb;
+
+  const material = new THREE.PointsMaterial({
+    color: particleColor,
+    size: 0.05,
+    transparent: true,
+    opacity: 0.8
   });
 
-  // Handle errors gracefully
-  splineViewer.addEventListener('error', () => {
-    hero3d.style.display = 'none';
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+
+  camera.position.z = 5;
+
+  // Animation
+  let animationId;
+  function animate() {
+    animationId = requestAnimationFrame(animate);
+
+    const positions = particles.geometry.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] += velocities[i].x;
+      positions[i * 3 + 1] += velocities[i].y;
+      positions[i * 3 + 2] += velocities[i].z;
+
+      // Wrap around
+      if (Math.abs(positions[i * 3]) > 5) positions[i * 3] *= -0.9;
+      if (Math.abs(positions[i * 3 + 1]) > 5) positions[i * 3 + 1] *= -0.9;
+      if (Math.abs(positions[i * 3 + 2]) > 5) positions[i * 3 + 2] *= -0.9;
+    }
+    particles.geometry.attributes.position.needsUpdate = true;
+    particles.rotation.y += 0.001;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  // Handle resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Update color on theme change
+  const observer = new MutationObserver(() => {
+    const isDark = !document.documentElement.classList.contains('light');
+    material.color.setHex(isDark ? 0x3b82f6 : 0x2563eb);
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+  // Cleanup
+  window.addEventListener('beforeunload', () => {
+    cancelAnimationFrame(animationId);
+    geometry.dispose();
+    material.dispose();
+    renderer.dispose();
   });
 })();

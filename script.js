@@ -237,3 +237,30 @@
     yearElement.textContent = new Date().getFullYear();
   }
 })();
+
+// =================== SPLINE 3D LOADING ===================
+(function initSpline3D() {
+  const splineViewer = document.querySelector('spline-viewer');
+  const hero3d = document.querySelector('.hero-3d');
+
+  if (!splineViewer || !hero3d) return;
+
+  // Hide on low-power devices or when data saver is on
+  const isLowPowerDevice = window.navigator.hardwareConcurrency <= 2;
+  const isDataSaverEnabled = window.navigator.connection && window.navigator.connection.saveData;
+
+  if (isLowPowerDevice || isDataSaverEnabled) {
+    hero3d.style.display = 'none';
+    return;
+  }
+
+  // Add loading class when scene starts loading
+  splineViewer.addEventListener('load', () => {
+    hero3d.classList.add('loaded');
+  });
+
+  // Handle errors gracefully
+  splineViewer.addEventListener('error', () => {
+    hero3d.style.display = 'none';
+  });
+})();

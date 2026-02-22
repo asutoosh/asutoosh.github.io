@@ -315,6 +315,8 @@ nav a:focus-visible {
   flex-direction: column;
   justify-content: center;
   gap: var(--space-lg);
+  position: relative;
+  min-height: 60vh;
 }
 
 .hero h1 {
@@ -326,6 +328,38 @@ nav a:focus-visible {
   gap: var(--space-sm);
   flex-wrap: wrap;
   margin-top: var(--space-md);
+}
+
+/* Hero 3D Background */
+.hero-3d {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.6;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-3d spline-viewer {
+  width: 100%;
+  height: 100%;
+}
+
+/* Mobile: reduce 3D opacity */
+@media (max-width: 768px) {
+  .hero-3d {
+    opacity: 0.3;
+  }
+}
+
+/* Low motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .hero-3d {
+    display: none;
+  }
 }
 
 .social-links {

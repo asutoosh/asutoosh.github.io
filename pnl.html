@@ -6,6 +6,9 @@
   <meta name="color-scheme" content="dark light" />
   <title>Trading — PnL</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>📈</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root{
@@ -26,7 +29,7 @@
         radial-gradient(1200px 600px at 90% -10%, color-mix(in oklch, var(--brand) 30%, transparent), transparent 70%),
         radial-gradient(900px 500px at -10% 20%, color-mix(in oklch, var(--brand-2) 24%, transparent), transparent 60%),
         var(--bg);
-      color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      color:var(--text); font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     }
     .container{width:min(100% - 2*var(--gap), var(--maxw)); margin-inline:auto}
     header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(120%) blur(10px);
@@ -46,6 +49,11 @@
     .controls{display:flex; align-items:center; gap:12px; margin-top:10px}
     .select{border:1px solid var(--border); background:var(--panel); color:var(--text); border-radius:10px; padding:.5rem .7rem}
     :focus-visible{outline:2px solid var(--ring); outline-offset:2px; border-radius:8px}
+    .error-banner{padding:16px 20px; border-radius:var(--radius); background: color-mix(in oklch, var(--neg) 15%, var(--panel));
+      border:1px solid color-mix(in oklch, var(--neg) 40%, var(--border)); color:var(--text); margin-top:16px; display:none}
+    .error-banner h3{font-size:16px; margin-bottom:4px; color:var(--neg)}
+    .error-banner p{font-size:14px; color:var(--muted); margin:0}
+    .empty-chart-msg{display:flex; align-items:center; justify-content:center; height:140px; color:var(--muted); font-size:14px}
   </style>
 </head>
 <body>
@@ -69,6 +77,11 @@
         <option value="30">Last 1 month</option>
       </select>
       <a class="btn" id="openRaw" href="#" target="_blank" rel="noopener">Open Raw JSON</a>
+    </div>
+
+    <div class="error-banner" id="errorBanner">
+      <h3>⚠️ Data unavailable</h3>
+      <p id="errorMsg">Could not load trading data. The Google Sheets API may be temporarily unreachable. Try refreshing the page.</p>
     </div>
 
     <div class="grid grid-2" style="margin-top:16px">
@@ -231,9 +244,15 @@
       }
     }
 
+    function showError(msg){
+      const banner = document.getElementById('errorBanner');
+      document.getElementById('errorMsg').textContent = msg;
+      banner.style.display = 'block';
+    }
+
     function updateCharts(items){
       if(!items || !items.length){
-        alert('No data to display yet.');
+        showError('No trading data available for the selected time range.');
         return;
       }
       ensureCharts();
@@ -277,7 +296,7 @@
         select.addEventListener('change', applyRange);
         applyRange(); // default (7 days)
       }catch(e){
-        alert('Could not load data: ' + (e && e.message ? e.message : e));
+        showError('Could not load data: ' + (e && e.message ? e.message : e));
         console.error(e);
       }
     })();

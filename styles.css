@@ -156,106 +156,78 @@ section {
   padding-block: var(--space-3xl);
 }
 
-/* =================== HEADER / NAV =================== */
-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(12px) saturate(120%);
-  background: rgba(10, 10, 10, 0.8);
-  border-bottom: 1px solid var(--border);
-}
-
-:root.light header {
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.nav {
+/* =================== BOTTOM DOCK NAV =================== */
+.bottom-dock {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-sm);
-  padding-block: var(--space-sm);
+  gap: 4px;
+  padding: 8px 12px;
+  background: rgba(24, 24, 27, 0.85);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-.brand {
-  font-weight: 700;
-  font-size: var(--text-lg);
-  display: flex;
+:root.light .bottom-dock {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.dock-item {
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-}
-
-.brand-emoji {
-  font-size: var(--text-2xl);
-}
-
-nav ul {
-  display: flex;
-  gap: var(--space-md);
-  list-style: none;
-}
-
-nav a {
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   color: var(--muted);
-  transition: color var(--transition);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 1rem;
 }
 
-nav a:hover,
-nav a:focus-visible {
+.dock-item:hover,
+.dock-item:focus-visible {
   color: var(--text);
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
   outline: none;
 }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
+:root.light .dock-item:hover,
+:root.light .dock-item:focus-visible {
+  background: rgba(0, 0, 0, 0.06);
 }
 
-/* Mobile Nav */
-.hamburger {
-  display: none;
-  background: none;
-  border: 1px solid var(--border);
-  padding: var(--space-xs);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  color: var(--text);
+.dock-item svg {
+  width: 18px;
+  height: 18px;
 }
 
-@media (max-width: 768px) {
-  nav {
-    display: none;
-  }
-  
-  nav.open {
-    display: block;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: var(--space-sm);
-  }
-  
-  nav.open ul {
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  nav.open a {
-    display: block;
-    padding: var(--space-sm);
-  }
-  
-  .hamburger {
-    display: block;
-  }
+.dock-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+:root.light .dock-divider {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  padding-bottom: 80px;
 }
 
 /* =================== BUTTONS =================== */

@@ -314,6 +314,30 @@ section { padding-block: var(--space-6); }
   border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
 }
 .social-link svg { width: 18px; height: 18px; }
+.social-link-disabled {
+  cursor: default;
+  position: relative;
+}
+.social-link-disabled::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.68rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  padding: 0.2rem 0.45rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--speed-fast) ease;
+}
+.social-link-disabled:hover::after {
+  opacity: 1;
+}
 
 .proof {
   display: grid;

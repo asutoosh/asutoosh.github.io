@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark light">
   <title>Builds - Asutosh Pattanayak</title>
-  <meta name="description" content="Detailed case studies of projects built by Asutosh Pattanayak.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>🛠️</text></svg>">
+  <meta name="description" content="The full story behind everything I've built — from internet hacks to SaaS attempts to real revenue.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>🚀</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,119 +24,129 @@
 
   <main>
     <section class="container hero" data-reveal>
-      <div class="eyebrow">Builds and Outcomes</div>
-      <h1>Detailed case studies from experiments, client work, and products.</h1>
-      <p class="lead">This page holds the full context behind what was built, what happened in the market, and what each project taught me.</p>
+      <h1>how i got here</h1>
+      <p class="lead">Not a résumé. Just the real sequence — what I hacked, what I built, what failed, and what started making money.</p>
     </section>
 
-    <section class="container" data-reveal>
-      <div class="section-head">
-        <h2>Case Studies</h2>
-      </div>
-      <div class="grid grid-3" style="margin-bottom: 1rem;">
-        <article class="card">
-          <div class="project-thumbnail overlay">
-            <img src="assets/freyalive.png" alt="Freya case study screenshot" loading="lazy">
+    <section class="container">
+      <div class="story">
+
+        <div class="story-chapter is-visible" data-reveal>
+          <span class="story-label hack">Hack</span>
+          <h3>YouTube giveaway mechanics</h3>
+          <p>Some IPL fantasy creators reward the first commenter on new videos and announce it in their Telegram groups beforehand. I noticed the same accounts winning repeatedly, so I reverse-engineered the system.</p>
+          <p>It was purely a speed problem. I learned basic Python and built a script using the YouTube API to detect uploads and comment instantly.</p>
+          <div class="story-outcome">
+            <strong>Result:</strong> Over three IPL seasons, I consistently placed among the first commenters. Won earbuds, smartwatches, a smartphone, and a few hundred dollars total.
           </div>
-          <h3>Freya Funnel</h3>
-          <p class="muted">Client project with gated demo UX and conversion focus.</p>
-        </article>
-        <article class="card">
-          <div class="project-thumbnail overlay">
-            <img src="assets/dashboard.png" alt="Dashboard case study screenshot" loading="lazy">
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label hack">Hack</span>
+          <h3>Being the middleman</h3>
+          <p>I noticed creators wanted visibility, and some niche websites already had the right audience. Instead of building something new, I just connected both sides.</p>
+          <p>I partnered with <strong>Hadzy.com</strong> and helped a creator promote through it. By coordinating both sides, I generated around <strong>$500 in commissions</strong> over two months.</p>
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label failed">Failed</span>
+          <h3>upcmts.com — first SaaS attempt</h3>
+          <p>I wanted to turn the commenting hack into a product. Built a WordPress-based site called <strong>upcmts.com</strong> where I offered a "first comment service" on YouTube giveaways. The idea was simple: speed wins rewards.</p>
+          <p>The domain expired (Nov 2025). It failed mainly because I didn't understand distribution at that time.</p>
+          <div class="story-outcome">
+            <strong>Lesson:</strong> Distribution matters more than just building. A useful product still fails without a channel.
           </div>
-          <h3>Trading Dashboard</h3>
-          <p class="muted">24/7 signals product with daily active trading users.</p>
-        </article>
-        <article class="card">
-          <div class="project-thumbnail overlay">
-            <img src="assets/pg.png" alt="PG website case study screenshot" loading="lazy">
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label revenue">Revenue</span>
+          <h3>PG websites — real clients, real impact</h3>
+          <p>Built <a href="https://kangaroohousing.in/" target="_blank" rel="noopener" class="story-link">kangaroohousing.in</a> for a PG owner in Delhi. Helped him get ~10–12 new clients per month. In return, he reduced my rent slightly — not a startup exit, but still ROI.</p>
+          <p>Then built <strong>swamivivekanandpg.com</strong> for the same owner's second property. Less impact, but continued learning.</p>
+          <img src="assets/pg.png" alt="PG website screenshot" class="story-img" loading="lazy">
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label revenue">Revenue</span>
+          <h3>NGO website</h3>
+          <p>Built a website for a Delhi-based NGO. Can't disclose details publicly, but it was real client work with real delivery.</p>
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label revenue">Revenue</span>
+          <h3>Freya Trades — UK trading client</h3>
+          <p>Built <a href="https://freyatrades.page/" target="_blank" rel="noopener" class="story-link">freyatrades.page</a> as the main landing page, then built <a href="https://live.freyatrades.page/" target="_blank" rel="noopener" class="story-link">live.freyatrades.page</a> as a gated demo system with IP and browser fingerprint restrictions. Signals show for 3 minutes, then prompt to join premium on Telegram or Whop.</p>
+          <img src="assets/freyalive.png" alt="Freyatrades live demo" class="story-img" loading="lazy">
+          <div class="story-outcome">
+            <strong>Result:</strong> 50+ sales generated and around <strong>$5K revenue</strong> from the funnel.
           </div>
-          <h3>PG Growth Websites</h3>
-          <p class="muted">Real client demand generation and local-market impact.</p>
-        </article>
-      </div>
-      <ul class="timeline">
-        <li>
-          <h3>1) Upcmts.com - first SaaS attempt (failed but foundational)</h3>
-          <p>WordPress-based service for "first comment" use cases in giveaway ecosystems where timing mattered.</p>
-          <ul class="metric-list">
-            <li><strong>What happened:</strong> project eventually shut down (domain expired in Nov 2025).</li>
-            <li><strong>Main lesson:</strong> distribution is often more important than building quality alone.</li>
-          </ul>
-        </li>
-        <li>
-          <h3>2) Client websites - practical market impact</h3>
-          <ul class="metric-list">
-            <li><strong>Kangaroo Housing:</strong> <a href="https://kangaroohousing.in/" target="_blank" rel="noopener">kangaroohousing.in</a> for a Delhi PG owner, contributing to roughly 10-12 new clients monthly.</li>
-            <li><strong>Swami Vivekanand PG:</strong> second property website for the same owner with continued iteration.</li>
-            <li><strong>NGO build:</strong> delivered for a Delhi-based NGO (public details intentionally withheld).</li>
-            <li><strong>Freya project:</strong> <a href="https://freyatrades.page/" target="_blank" rel="noopener">freyatrades.page</a> + <a href="https://live.freyatrades.page/" target="_blank" rel="noopener">live demo</a> with IP/browser restrictions, resulting in 50+ sales and around $5K revenue.</li>
-          </ul>
-        </li>
-        <li>
-          <h3>3) Trading dashboard - product thinking phase</h3>
-          <p><a href="https://dashboard.asutoosh.me/" target="_blank" rel="noopener">dashboard.asutoosh.me</a> is a 24/7 signal dashboard built after repeated trading-client engagements.</p>
-          <ul class="metric-list">
-            <li><strong>Scope:</strong> Forex + crypto signals in one place.</li>
-            <li><strong>System baseline:</strong> around 40% win rate with 1:5 risk-reward framing.</li>
-            <li><strong>Community:</strong> 40+ traders using the system daily.</li>
-          </ul>
-        </li>
-        <li>
-          <h3>4) Smart Rewrite Keyboard (Android)</h3>
-          <p>Internal Play Store testing release built for practical writing assistance.</p>
-          <ul class="metric-list">
-            <li><strong>Core capabilities:</strong> rewrite sentences, translate, GPT-style assistant workflow.</li>
-            <li><strong>Status:</strong> testing/internal access; built for learning and market validation.</li>
-          </ul>
-        </li>
-        <li>
-          <h3>5) Current active build pipeline</h3>
-          <div class="tag-list">
-            <span class="tag">Auto blog poster (WordPress + SEO)</span>
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label product">Product</span>
+          <h3>dashboard.asutoosh.me — my own product</h3>
+          <p>After working with trading clients, I realized even simple products can generate serious revenue if positioned correctly. So I built <a href="https://dashboard.asutoosh.me/" target="_blank" rel="noopener" class="story-link">dashboard.asutoosh.me</a> — a 24/7 automated trading signal dashboard.</p>
+          <p>Works across forex and crypto. ~40% win rate with 1:5 risk-reward. Built a small community of <strong>40+ traders</strong> using it daily.</p>
+          <img src="assets/dashboard.png" alt="Trading dashboard" class="story-img" loading="lazy">
+          <div class="story-outcome">
+            <strong>Result:</strong> Generated <strong>$5K+ revenue</strong>. Planning to monetize it properly.
+          </div>
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label product">Product</span>
+          <h3>Typing Smart — Android keyboard app</h3>
+          <p>As someone who struggled with English, I built a keyboard that rewrites sentences, translates automatically, and acts as a GPT wrapper. Published internally on Play Store under <strong>Jlnx Studios</strong> (closed testing phase).</p>
+          <div class="story-shot-grid" aria-label="Typing Smart app screenshots">
+            <img src="assets/app/1. app_permission.png" alt="Typing Smart app permission screen" class="story-shot" loading="lazy">
+            <img src="assets/app/2.interface.png" alt="Typing Smart interface screen" class="story-shot" loading="lazy">
+            <img src="assets/app/3. icon.png" alt="Typing Smart app icon and preview" class="story-shot" loading="lazy">
+            <img src="assets/app/4. ui.png" alt="Typing Smart UI screen" class="story-shot" loading="lazy">
+          </div>
+          <div class="story-outcome">
+            <strong>Status:</strong> Internal testing. Built to learn Android ecosystem, not just to chase revenue. <a href="https://play.google.com/apps/testing/com.smartai.keyboard.v2" target="_blank" rel="noopener" class="story-link">Play Store (testing)</a>
+          </div>
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label product">Product</span>
+          <h3>PG Manager — CRM app for PG owners</h3>
+          <p>CRM app for PG owners to manage tenants, payments, and occupancy tracking in one place. Also published under <strong>Jlnx Studios</strong> on Play Store.</p>
+          <div class="story-shot-grid" aria-label="PG Manager CRM screenshots">
+            <img src="assets/crm/1. open.png" alt="PG Manager CRM open screen" class="story-shot" loading="lazy">
+            <img src="assets/crm/2. ui.png" alt="PG Manager CRM UI screen" class="story-shot" loading="lazy">
+            <img src="assets/crm/3. reportsimage.png" alt="PG Manager CRM reports screen" class="story-shot" loading="lazy">
+            <img src="assets/crm/monetize.png" alt="PG Manager CRM monetization screen" class="story-shot" loading="lazy">
+          </div>
+          <div class="story-outcome">
+            <strong>Status:</strong> Beta testing. <a href="https://play.google.com/apps/testing/com.pgmanager.crm" target="_blank" rel="noopener" class="story-link">Play Store (testing)</a>
+          </div>
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label scale">Scale</span>
+          <h3>Dupgs.com — the big bet</h3>
+          <p>Right now, the most important thing I'm building is <a href="https://dupgs.com/" target="_blank" rel="noopener" class="story-link">Dupgs</a>. A platform connecting PG owners in Delhi with students coming to the city for college.</p>
+          <p>Every year, around 1.3 million students appear for CUET, and roughly 70,000 move to Delhi. Most of them struggle to find PG accommodation near their colleges. I mapped <strong>90+ Delhi University colleges</strong> and built a system that connects them with PGs within a 300-meter radius.</p>
+          <div class="story-outcome">
+            <strong>Current focus:</strong> Supply onboarding via calling agent + WhatsApp automation. Co-founder working on the app side. Content + SEO to capture demand. Targeting <strong>$400K/year</strong> business.
+          </div>
+        </div>
+
+        <div class="story-chapter" data-reveal>
+          <span class="story-label pipeline">Pipeline</span>
+          <h3>What I'm building right now</h3>
+          <p>Multiple tools in parallel. Yes, slightly chaotic — but I prioritize shipping.</p>
+          <div class="tag-list" style="margin-top: 0.5rem;">
+            <span class="tag">Auto blog poster</span>
             <span class="tag">Image enhancer API</span>
-            <span class="tag">UGC ad content generator</span>
-            <span class="tag">Whisper transcription pipeline</span>
-            <span class="tag">Conscious Recall platform</span>
+            <span class="tag">UGC ad generator</span>
+            <span class="tag">Whisper transcription</span>
+            <span class="tag">Conscious Recall</span>
             <span class="tag">X bookmark manager</span>
           </div>
-          <p class="muted" style="margin-top: 0.8rem;">Operating principle: launch fast, test quickly, scale only validated bets.</p>
-        </li>
-      </ul>
-    </section>
+        </div>
 
-    <section class="container" data-reveal>
-      <div class="section-head">
-        <h2>Most Important Build: Dupages</h2>
-      </div>
-      <div class="card">
-        <p>Dupages is positioned as a student accommodation platform connecting Delhi PG owners with incoming students. The mapping system currently covers 90+ Delhi University colleges with nearest-PG discovery logic around a 300-meter radius.</p>
-        <ul class="metric-list">
-          <li><strong>Why now:</strong> each year a large student cohort relocates and struggles with discovery friction.</li>
-          <li><strong>Execution strategy:</strong> owner onboarding through calling agent and WhatsApp workflows, with app + SEO expansion.</li>
-          <li><strong>Business intent:</strong> first project being pushed with full scale mindset and long-term monetization planning.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="container" data-reveal>
-      <div class="section-head">
-        <h2>Favorite Build Quotes</h2>
-      </div>
-      <div class="quote-grid">
-        <article class="quote-card">
-          <p>"What gets shipped gets feedback. What gets feedback gets better."</p>
-          <span>Why I bias toward fast releases.</span>
-        </article>
-        <article class="quote-card">
-          <p>"You can win with a simple product if positioning is strong."</p>
-          <span>Lesson reinforced by trading-client execution.</span>
-        </article>
-        <article class="quote-card">
-          <p>"Revenue is a feature, not a side effect."</p>
-          <span>Business-first filter for project selection now.</span>
-        </article>
       </div>
     </section>
   </main>

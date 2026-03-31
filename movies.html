@@ -11,6 +11,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .watch-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+    @media (max-width: 680px) { .watch-grid { grid-template-columns: 1fr; } }
+    .watch-item { display: flex; gap: var(--space-3); align-items: center; padding: 0.65rem 0; border-bottom: 1px solid var(--border); }
+    .watch-item:last-child { border-bottom: none; }
+    .watch-cover { width: 54px; height: 72px; border-radius: 0.55rem; border: 1px solid var(--border); object-fit: cover; background: var(--surface-soft); flex-shrink: 0; }
+    .watch-meta { display: grid; gap: 0.12rem; }
+    .watch-name { font-weight: 600; color: var(--text); font-size: var(--text-sm); }
+    .watch-note { color: var(--muted); font-size: var(--text-xs); }
+  </style>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to main content</a>
@@ -42,84 +52,100 @@
     <section class="container hero" data-reveal>
       <div class="eyebrow">Personal</div>
       <h1>Movies</h1>
-      <p class="lead">Films and shows that have inspired, entertained, or changed how I think.</p>
+      <p class="lead">Stuff I watch (and want to watch). I’ll add real cover photos later — using dummy posters for now.</p>
     </section>
 
     <section class="container" data-reveal>
       <div class="personal-page-list">
 
         <div>
-          <div class="personal-section-title">Films — All-time favourites</div>
-          <ul class="item-list">
-            <li>
-              <span class="item-name">The Social Network</span>
-              <span class="item-author">David Fincher, 2010</span>
-            </li>
-            <li>
-              <span class="item-name">Interstellar</span>
-              <span class="item-author">Christopher Nolan, 2014</span>
-            </li>
-            <li>
-              <span class="item-name">The Pursuit of Happyness</span>
-              <span class="item-author">Gabriele Muccino, 2006</span>
-            </li>
-            <li>
-              <span class="item-name">Whiplash</span>
-              <span class="item-author">Damien Chazelle, 2014</span>
-            </li>
-            <li>
-              <span class="item-name">3 Idiots</span>
-              <span class="item-author">Rajkumar Hirani, 2009</span>
-            </li>
-            <li>
-              <span class="item-name">Inception</span>
-              <span class="item-author">Christopher Nolan, 2010</span>
-            </li>
-          </ul>
+          <div class="personal-section-title">Game</div>
+          <div class="watch-grid">
+            <div class="watch-item">
+              <img class="watch-cover" src="https://picsum.photos/seed/detroit/160/220" alt="Detroit: Become Human cover (placeholder)" loading="lazy">
+              <div class="watch-meta">
+                <div class="watch-name">Detroit: Become Human</div>
+                <div class="watch-note">Game</div>
+              </div>
+            </div>
+            <div class="watch-item">
+              <img class="watch-cover" src="https://picsum.photos/seed/awayout/160/220" alt="A Way Out cover (placeholder)" loading="lazy">
+              <div class="watch-meta">
+                <div class="watch-name">A Way Out</div>
+                <div class="watch-note">Game</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>
-          <div class="personal-section-title">Shows &amp; Documentaries</div>
-          <ul class="item-list">
-            <li>
-              <span class="item-name">Breaking Bad</span>
-              <span class="item-author">Vince Gilligan</span>
-            </li>
-            <li>
-              <span class="item-name">Silicon Valley</span>
-              <span class="item-author">Mike Judge</span>
-            </li>
-            <li>
-              <span class="item-name">The Last Dance</span>
-              <span class="item-author">Jason Hehir, 2020</span>
-            </li>
-            <li>
-              <span class="item-name">Startup (Netflix)</span>
-              <span class="item-author">Ben Ketai</span>
-            </li>
-            <li>
-              <span class="item-name">Inside Bill's Brain</span>
-              <span class="item-author">Davis Guggenheim, 2019</span>
-            </li>
-          </ul>
+          <div class="personal-section-title">Bollywood</div>
+          <div class="watch-grid">
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/tamasha/160/220" alt="Tamasha cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Tamasha</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/shivay/160/220" alt="Shivay cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Shivay (Ajay Devgan)</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/3idiots/160/220" alt="3 Idiots cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">3 Idiots</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/tumk/160/220" alt="TUMK cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">TUMK</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/highway/160/220" alt="Highway cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Highway (Alia Bhatt)</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/wasseypur/160/220" alt="Gangs of Wasseypur cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Gangs of Wasseypur</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/aladdin/160/220" alt="Aladdin cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Aladdin</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/batman/160/220" alt="Batman cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Batman</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/fastfurious/160/220" alt="Fast and Furious cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Fast and Furious</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/rednotice/160/220" alt="Red Notice cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Red Notice</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/tumbbad/160/220" alt="Tumbbad cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Tumbbad</div><div class="watch-note">Bollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/manjummel/160/220" alt="Manjummel Boys cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Manjummel Boys</div><div class="watch-note">Bollywood</div></div></div>
+          </div>
         </div>
 
         <div>
-          <div class="personal-section-title">Bollywood picks</div>
-          <ul class="item-list">
-            <li>
-              <span class="item-name">Swades</span>
-              <span class="item-author">Ashutosh Gowariker, 2004</span>
-            </li>
-            <li>
-              <span class="item-name">Taare Zameen Par</span>
-              <span class="item-author">Aamir Khan, 2007</span>
-            </li>
-            <li>
-              <span class="item-name">Dangal</span>
-              <span class="item-author">Nitesh Tiwari, 2016</span>
-            </li>
-          </ul>
+          <div class="personal-section-title">Hollywood</div>
+          <div class="watch-grid">
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/parasite/160/220" alt="Parasite cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Parasite</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/socialnetwork/160/220" alt="The Social Network cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">The Social Network</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/taxidriver/160/220" alt="Taxi Driver cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Taxi Driver</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/youngsheldon/160/220" alt="Young Sheldon cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Young Sheldon</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/johnwick/160/220" alt="John Wick cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">John Wick</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/percyjackson/160/220" alt="Percy Jackson cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Percy Jackson</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/harrypotter/160/220" alt="Harry Potter cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Harry Potter</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/finaldestination/160/220" alt="Final Destination cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Final Destination</div><div class="watch-note">Hollywood</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/fightclub/160/220" alt="Fight Club cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Fight Club</div><div class="watch-note">Hollywood</div></div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="personal-section-title">Anime</div>
+          <div class="watch-grid">
+            <div class="watch-item">
+              <img class="watch-cover" src="https://picsum.photos/seed/codegeass/160/220" alt="Code Geass cover (placeholder)" loading="lazy">
+              <div class="watch-meta">
+                <div class="watch-name">Code Geass</div>
+                <div class="watch-note">Anime</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="personal-section-title">My recommended movies</div>
+          <div class="watch-grid">
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/delhibelly/160/220" alt="Delhi Belly cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Delhi Belly</div><div class="watch-note">Recommended</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/gogogoa/160/220" alt="Gogo Goa Gone cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Gogo Goa Gone</div><div class="watch-note">Recommended</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/wasseypur2/160/220" alt="Gangs of Wasseypur cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Gangs of Wasseypur</div><div class="watch-note">Recommended</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/dictator/160/220" alt="The Dictator cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">The Dictator</div><div class="watch-note">Recommended</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/rednotice2/160/220" alt="Red Notice cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Red Notice</div><div class="watch-note">Recommended</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/hangover/160/220" alt="Hangover cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Hangover</div><div class="watch-note">Recommended</div></div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="personal-section-title">My recommended webseries</div>
+          <div class="watch-grid">
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/asur/160/220" alt="Asur cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Asur</div><div class="watch-note">Webseries</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/hanuman/160/220" alt="Legends of Hanuman cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Legends of Hanuman (Hotstar Specials)</div><div class="watch-note">Webseries</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/sacredgames/160/220" alt="Sacred Games cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Sacred Games</div><div class="watch-note">Webseries</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/kaalapaani/160/220" alt="Kaala Paani cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Kaala Paani</div><div class="watch-note">Webseries</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/strangerthings/160/220" alt="Stranger Things cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">Stranger Things</div><div class="watch-note">Webseries</div></div></div>
+            <div class="watch-item"><img class="watch-cover" src="https://picsum.photos/seed/railwayman/160/220" alt="The Railway Man cover (placeholder)" loading="lazy"><div class="watch-meta"><div class="watch-name">The Railway Man</div><div class="watch-note">Webseries</div></div></div>
+          </div>
         </div>
 
       </div>

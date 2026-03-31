@@ -80,6 +80,20 @@
       border-bottom: none;
     }
 
+    .quote-photo {
+      padding-left: 0 !important;
+      border-bottom: 1px solid var(--border);
+    }
+    .quote-photo::before { content: none !important; }
+    .quote-photo img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      background: var(--surface-soft);
+    }
+
     .quote-attribution {
       display: block;
       color: var(--muted);
@@ -155,38 +169,47 @@
 
       <ul class="quotes-list">
         <li>Believing in yourself is another way of returning the middle finger to the society.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_13.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Act like you can't afford the Bread until they find out the bakery in their backyard owned by you.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_2.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Only that anger is bad followed by repentance. Ram's anger on a person like Ravana is always auspicious.</li>
 
         <li>Prioritizing yourself doesn't define your selfishness.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_8.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Study mathematics to understand physics. Physics to chemistry. Chemistry to biology. Biology to psychology. Psychology to economics. Economics… and philosophy to be free.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_11.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Biggest irony of school days — the loudest words shouted were: "Please be quiet."</li>
 
         <li>When you are saying yes to others, make sure you are not saying no to yourself.
           <span class="quote-attribution">— Paulo Coelho</span>
         </li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_4.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>If you have failed to prepare, then be prepared for the failure.</li>
 
         <li>First deserve, then desire. Or — you get served what you truly deserve.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_6.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>If you find a woman who gives you both a best friend and a wife, never let her go.</li>
 
         <li>People always tell introverts to be more talkative and leave their comfort zones. Yet no one tells extroverts to shut up to make the zone comfortable.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_1.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Being simple is the hardest.</li>
 
         <li>Biggest communication problem — we don't listen to understand. We listen to reply.</li>
 
         <li>Khamoshi bhi rakhti hain apni bhi ek zubaan, khamoshi ko chupke se sab kah jaane do!</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_9.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Before you argue with someone, ask yourself: "Is this person mentally mature enough to grasp the concept of a different perspective?" If not, there is no point to argue.</li>
 
         <li>This place makes me wonder which would be worse — to live as a monster, or to die as a good man.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_15.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Don't cry because it's over, smile because it happened.
           <span class="quote-attribution">— Dr. Seuss</span>
@@ -195,6 +218,7 @@
         <li>Half of being smart is knowing what you're dumb about.
           <span class="quote-attribution">— Solomon Short</span>
         </li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_10.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>He is not rich who can ride a Ferrari, but a person who can afford it.
           <span class="quote-attribution">— The Psychology of Money</span>
@@ -203,20 +227,24 @@
         <li>A sucker and a fool born in every second.
           <span class="quote-attribution">— P.T. Barnum</span>
         </li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_3.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>तत्कर्म यन्न बंधाय सा विद्या या विमुक्तये। आयासायापरम् कर्म विद्यान्या शिल्पनैपुणम्।
           <span class="quote-sanskrit">From Shri Vishnu Purana — That alone is action which does not bind, that alone is knowledge which liberates. All other actions are merely labor, and all other knowledge is merely craftsmanship.</span>
         </li>
 
         <li>The Vermillion Effect.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_12.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>You are crazy until you become successful — then you become a genius.</li>
 
         <li>If you can't stop thinking about it, then it matters.</li>
 
         <li>Ludwig Wittgenstein — greatest philosopher.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_16.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Hard work puts you where good luck can find you.</li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_5.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Use absence to increase respect and honor.</li>
 
@@ -227,6 +255,7 @@
         <li>It is always with the best intentions that the worst work is done.
           <span class="quote-attribution">— Oscar Wilde</span>
         </li>
+        <li class="quote-photo"><img src="../assets/keep_going/img_7.jpeg" alt="Keep going visual" loading="lazy"></li>
 
         <li>Most of the evils in this world are done by people with good intentions.
           <span class="quote-attribution">— T.S. Eliot</span>
@@ -236,15 +265,6 @@
           <span class="quote-attribution">— Asu_thoughts</span>
         </li>
       </ul>
-
-      <div class="keep-going-gallery" aria-label="Keep going visuals">
-        <img src="../assets/keep_going/img_1.jpeg" alt="Keep going visual 1" loading="lazy">
-        <img src="../assets/keep_going/img_5.jpeg" alt="Keep going visual 5" loading="lazy">
-        <img src="../assets/keep_going/img_7.jpeg" alt="Keep going visual 7" loading="lazy">
-        <img src="../assets/keep_going/img_10.jpeg" alt="Keep going visual 10" loading="lazy">
-        <img src="../assets/keep_going/img_12.jpeg" alt="Keep going visual 12" loading="lazy">
-        <img src="../assets/keep_going/img_16.jpeg" alt="Keep going visual 16" loading="lazy">
-      </div>
 
       <div class="collecting-line">
         collecting on the way…

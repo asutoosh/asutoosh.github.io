@@ -11,6 +11,139 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .books-wrap {
+      display: grid;
+      gap: 3rem;
+    }
+
+    .books-section {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .books-section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .books-section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .books-section-note {
+      color: var(--muted, #9ca3af);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      max-width: 60ch;
+    }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .book-grid-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .book-grid-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .book-grid-item img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+      background: #111;
+    }
+
+    .item-name {
+      display: block;
+      margin-top: 0.8rem;
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .item-author {
+      display: block;
+      margin-top: 0.25rem;
+      font-size: 0.82rem;
+      color: var(--muted, #9ca3af);
+      line-height: 1.35;
+    }
+
+    .todo-list {
+      display: grid;
+      gap: 0.7rem;
+      margin-top: 0.25rem;
+    }
+
+    .todo-item {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 0.8rem;
+      align-items: start;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .todo-check {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1;
+      flex: 0 0 auto;
+      margin-top: 1px;
+    }
+
+    .todo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.12rem;
+    }
+
+    .todo-title {
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .todo-author {
+      font-size: 0.84rem;
+      color: var(--muted, #9ca3af);
+      line-height: 1.35;
+    }
+
+    @media (max-width: 640px) {
+      .book-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+    }
+  </style>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to main content</a>
@@ -46,108 +179,277 @@
     </section>
 
     <section class="container" data-reveal>
-      <div class="personal-page-list">
+      <div class="books-wrap">
 
-        <div>
-          <div class="personal-section-title">Building &amp; Business</div>
-          <div class="book-grid">
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0307463745-M.jpg" alt="Rework cover" loading="lazy">
-              <span class="item-name">Rework</span>
-              <span class="item-author">Jason Fried &amp; DHH</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0804139296-M.jpg" alt="Zero to One cover" loading="lazy">
-              <span class="item-name">Zero to One</span>
-              <span class="item-author">Peter Thiel</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0307887898-M.jpg" alt="The Lean Startup cover" loading="lazy">
-              <span class="item-name">The Lean Startup</span>
-              <span class="item-author">Eric Ries</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0062457713-M.jpg" alt="The Alchemist cover" loading="lazy">
-              <span class="item-name">The Alchemist</span>
-              <span class="item-author">Paulo Coelho</span>
-            </div>
+        <div class="books-section">
+          <div class="books-section-header">
+            <div class="books-section-title">Already Read</div>
+            <div class="books-section-note">These are the books I have already read.</div>
           </div>
-        </div>
 
-        <div>
-          <div class="personal-section-title">Leverage &amp; Influence</div>
           <div class="book-grid">
             <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0670031852-M.jpg" alt="48 Laws of Power cover" loading="lazy">
-              <span class="item-name">The 48 Laws of Power</span>
-              <span class="item-author">Robert Greene</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0671027034-M.jpg" alt="How to Win Friends cover" loading="lazy">
-              <span class="item-name">How to Win Friends &amp; Influence People</span>
-              <span class="item-author">Dale Carnegie</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/1544514212-M.jpg" alt="Almanack of Naval cover" loading="lazy">
-              <span class="item-name">The Almanack of Naval Ravikant</span>
-              <span class="item-author">Eric Jorgenson</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/1612680194-M.jpg" alt="Rich Dad Poor Dad cover" loading="lazy">
-              <span class="item-name">Rich Dad Poor Dad</span>
-              <span class="item-author">Robert Kiyosaki</span>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="personal-section-title">Discipline &amp; Mind</div>
-          <div class="book-grid">
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/1544512279-M.jpg" alt="Can't Hurt Me cover" loading="lazy">
-              <span class="item-name">Can't Hurt Me</span>
-              <span class="item-author">David Goggins</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0735211299-M.jpg" alt="Atomic Habits cover" loading="lazy">
-              <span class="item-name">Atomic Habits</span>
-              <span class="item-author">James Clear</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/1455586692-M.jpg" alt="Deep Work cover" loading="lazy">
-              <span class="item-name">Deep Work</span>
-              <span class="item-author">Cal Newport</span>
-            </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/9780143028475-M.jpg" alt="Bhagavad Gita cover" loading="lazy">
+              <img
+                src="https://www.eourmart.com/cdn/shop/products/gita.webp"
+                alt="Bhagavad Gita cover"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=Bhagavad+Gita';"
+              >
               <span class="item-name">Bhagavad Gita</span>
               <span class="item-author">Ancient text</span>
             </div>
+
+            <div class="book-grid-item">
+              <img
+                src="https://m.media-amazon.com/images/I/91Ccq18dSuL._SL800_.jpg"
+                alt="The Alchemist cover"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=The+Alchemist';"
+              >
+              <span class="item-name">The Alchemist</span>
+              <span class="item-author">Paulo Coelho</span>
+            </div>
+
+            <div class="book-grid-item">
+              <img
+                src="https://m.media-amazon.com/images/I/41jq-ouUBkL._SL500_.jpg"
+                alt="Rework cover"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=Rework';"
+              >
+              <span class="item-name">Rework</span>
+              <span class="item-author">Jason Fried &amp; DHH</span>
+            </div>
+
+            <div class="book-grid-item">
+              <img
+                src="https://miro.medium.com/1*OtxsMJ5huAFwANLR6lONyw.jpeg"
+                alt="How to Win Friends and Influence People cover"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=How+to+Win+Friends';"
+              >
+              <span class="item-name">How to Win Friends &amp; Influence People</span>
+              <span class="item-author">Dale Carnegie</span>
+            </div>
+
+            <div class="book-grid-item">
+              <img
+                src="https://miro.medium.com/0*tjjVWoTGZzfhOLTO.jpg"
+                alt="The 48 Laws of Power cover"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=48+Laws+of+Power';"
+              >
+              <span class="item-name">The 48 Laws of Power</span>
+              <span class="item-author">Robert Greene</span>
+            </div>
           </div>
         </div>
 
-        <div>
-          <div class="personal-section-title">Thinking &amp; Systems</div>
-          <div class="book-grid">
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0374533555-M.jpg" alt="Thinking Fast and Slow cover" loading="lazy">
-              <span class="item-name">Thinking, Fast and Slow</span>
-              <span class="item-author">Daniel Kahneman</span>
+        <div class="books-section">
+          <div class="books-section-header">
+            <div class="books-section-title">Will Read Next</div>
+            <div class="books-section-note">A simple checklist of the rest of the books.</div>
+          </div>
+
+          <div class="todo-list">
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Not Nice</span>
+                <span class="todo-author">Dr. Aziz Gazipura</span>
+              </div>
             </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0807014273-M.jpg" alt="Man's Search for Meaning cover" loading="lazy">
-              <span class="item-name">Man's Search for Meaning</span>
-              <span class="item-author">Viktor E. Frankl</span>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Never Split the Difference</span>
+                <span class="todo-author">Chris Voss</span>
+              </div>
             </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0761169253-M.jpg" alt="Steal Like an Artist cover" loading="lazy">
-              <span class="item-name">Steal Like an Artist</span>
-              <span class="item-author">Austin Kleon</span>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Man's Search for Meaning</span>
+                <span class="todo-author">Viktor Frankl</span>
+              </div>
             </div>
-            <div class="book-grid-item">
-              <img src="https://covers.openlibrary.org/b/isbn/0143127748-M.jpg" alt="Power of Subconscious Mind cover" loading="lazy">
-              <span class="item-name">The Power of Your Subconscious Mind</span>
-              <span class="item-author">Joseph Murphy</span>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Influence</span>
+                <span class="todo-author">Robert Cialdini</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">The Subtle Art of Not Giving a F*ck</span>
+                <span class="todo-author">Mark Manson</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Rich Dad Poor Dad</span>
+                <span class="todo-author">Robert Kiyosaki</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Atomic Habits</span>
+                <span class="todo-author">James Clear</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">The Laws of Human Nature</span>
+                <span class="todo-author">Robert Greene</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Outliers</span>
+                <span class="todo-author">Malcolm Gladwell</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">12 Rules for Life</span>
+                <span class="todo-author">Jordan B. Peterson</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">The Richest Man in Babylon</span>
+                <span class="todo-author">George S. Clason</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">As a Man Thinketh</span>
+                <span class="todo-author">James Allen</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Mindset</span>
+                <span class="todo-author">Carol Dweck</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Think and Grow Rich</span>
+                <span class="todo-author">Napoleon Hill</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Year of Yes</span>
+                <span class="todo-author">Shonda Rhimes</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Can't Hurt Me</span>
+                <span class="todo-author">David Goggins</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Nonviolent Communication</span>
+                <span class="todo-author">Marshall Rosenberg</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Zen and the Art of Motorcycle Maintenance</span>
+                <span class="todo-author">Robert M. Pirsig</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Zero to One</span>
+                <span class="todo-author">Peter Thiel</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">The Hard Thing About Hard Things</span>
+                <span class="todo-author">Ben Horowitz</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">The Big Picture</span>
+                <span class="todo-author">Sean Carroll</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Enrichment Begins Within</span>
+                <span class="todo-author">Bob Proctor</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">From Here to Financial Happiness</span>
+                <span class="todo-author">Jonathan Clements</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">Why They Didn't Teach Me This in School</span>
+                <span class="todo-author">Cary Siegel</span>
+              </div>
+            </div>
+
+            <div class="todo-item">
+              <span class="todo-check">✓</span>
+              <div class="todo-text">
+                <span class="todo-title">My Philosophy for Successful Living</span>
+                <span class="todo-author">Jim Rohn</span>
+              </div>
             </div>
           </div>
         </div>

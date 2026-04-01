@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asutosh Pattanayak - Certificate</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --cert-max: 1120px;
+    }
+
+    body {
+      padding-bottom: 0;
+    }
+
+    .cert-shell {
+      width: min(100% - 2rem, var(--cert-max));
+      margin: 0 auto;
+      padding: 2rem 0 2.5rem;
+    }
+
+    .cert-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .cert-title {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .cert-title p {
+      margin-bottom: 0;
+    }
+
+    .cert-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .pdf-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: color-mix(in oklab, var(--surface) 90%, transparent);
+      box-shadow: var(--shadow);
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: min(82vh, 980px);
+      border: 0;
+      background: #0b0d12;
+      display: block;
+    }
+
+    .pdf-fallback {
+      padding: 1rem 1.1rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    @media (max-width: 720px) {
+      .cert-shell {
+        width: min(100% - 1rem, var(--cert-max));
+        padding-top: 1rem;
+        padding-bottom: 1.25rem;
+      }
+
+      .cert-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .pdf-frame {
+        height: 72vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="cert-shell">
+    <section class="cert-top">
+      <div class="cert-title">
+        <span class="eyebrow">Certificate</span>
+        <h1>Embedded Certificate PDF</h1>
+        <p class="muted">View the certificate directly here or open the PDF in a separate tab.</p>
+      </div>
+      <div class="cert-actions">
+        <a href="index.html" class="btn btn-soft">Back Home</a>
+        <a href="2026-04-01_7d6ace519d11aad8fb0c39081cdaa7bd_Td660947a_earnings.pdf" class="btn btn-primary" target="_blank" rel="noopener">Open PDF</a>
+      </div>
+    </section>
+
+    <section class="pdf-card">
+      <embed
+        class="pdf-frame"
+        src="2026-04-01_7d6ace519d11aad8fb0c39081cdaa7bd_Td660947a_earnings.pdf#toolbar=1&navpanes=0&scrollbar=1"
+        type="application/pdf"
+      />
+      <div class="pdf-fallback">
+        If the PDF preview does not load on your device, use
+        <a class="inline-highlight-link" href="2026-04-01_7d6ace519d11aad8fb0c39081cdaa7bd_Td660947a_earnings.pdf" target="_blank" rel="noopener">this direct link</a>.
+      </div>
+    </section>
+  </main>
+</body>
+</html>

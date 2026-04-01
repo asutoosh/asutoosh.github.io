@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asutosh Pattanayak - Resume</title>
+  <style>
+    :root {
+      --page-width: 210mm;
+      --page-height: 297mm;
+      --margin: 13mm;
+      --text: #111;
+      --muted: #555;
+      --line: #d8d8d8;
+      --accent: #111;
+      --bg: #e9ecef;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      padding: 18px 0;
+    }
+
+    .top-actions {
+      width: min(var(--page-width), calc(100vw - 24px));
+      max-width: 100%;
+      margin: 0 auto 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .home-btn,
+    .version-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.58rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(17, 17, 17, 0.14);
+      background: rgba(255, 255, 255, 0.72);
+      color: #111;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px) saturate(120%);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .home-btn:hover,
+    .version-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .version-btn.is-active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+    }
+
+    .page {
+      width: var(--page-width);
+      max-width: 100%;
+      min-height: var(--page-height);
+      margin: 0 auto;
+      background: #fff;
+      padding: var(--margin);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: 1fr 34mm;
+      gap: 12px;
+      align-items: start;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .name {
+      font-size: 28px;
+      line-height: 1.05;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      margin: 0;
+    }
+
+    .role {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 5px 0 7px 0;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .summary {
+      font-size: 10.2pt;
+      line-height: 1.45;
+      color: #222;
+      margin: 0;
+      max-width: 132mm;
+    }
+
+    .contact {
+      font-size: 9.6pt;
+      line-height: 1.45;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .photo-wrap {
+      width: 34mm;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .photo {
+      width: 32mm;
+      height: 32mm;
+      border: 1px solid #222;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #f2f2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo .fallback {
+      font-size: 20px;
+      font-weight: 700;
+      color: #666;
+      user-select: none;
+    }
+
+    .section {
+      margin-top: 9px;
+      page-break-inside: avoid;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 7px 0;
+      font-size: 11pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+      transform: translateY(1px);
+    }
+
+    .item {
+      margin-bottom: 7px;
+      page-break-inside: avoid;
+    }
+
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 2px;
+    }
+
+    .item-title {
+      font-size: 10.3pt;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .item-meta {
+      font-size: 9pt;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .item-sub {
+      font-size: 9.4pt;
+      color: #333;
+      margin: 0 0 2px 0;
+      line-height: 1.35;
+    }
+
+    ul.clean {
+      margin: 3px 0 0 17px;
+      padding: 0;
+    }
+
+    ul.clean li {
+      margin: 0 0 4px 0;
+      font-size: 9.35pt;
+      line-height: 1.38;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      font-size: 9.5pt;
+      line-height: 1.45;
+    }
+
+    .skill-line {
+      border-left: 2px solid #222;
+      padding-left: 8px;
+    }
+
+    .skill-label {
+      font-weight: 700;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .edu-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 9.4pt;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+
+    .edu-row strong {
+      font-size: 9.7pt;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid #222;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 8.4pt;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    .project-tags {
+      margin-top: 2px;
+    }
+
+    .footer-note {
+      position: absolute;
+      bottom: 10mm;
+      right: var(--margin);
+      font-size: 8pt;
+      color: #777;
+    }
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 8px;
+      font-size: 9.5pt;
+      color: #444;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .contact-item i {
+      font-size: 10px;
+      color: #111;
+      width: 12px;
+      text-align: center;
+    }
+    .contact a {
+      color: #111;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .contact a:hover {
+      text-decoration: underline;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        background: #fff;
+      }
+
+      body {
+        padding: 0;
+      }
+
+      .top-actions {
+        display: none;
+      }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+      }
+
+      .footer-note {
+        display: none;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+
+    @media screen and (max-width: 900px) {
+      body {
+        padding: 12px 0;
+      }
+
+      .top-actions {
+        width: calc(100vw - 24px);
+        margin-bottom: 8px;
+      }
+
+      .page {
+        width: min(210mm, calc(100vw - 24px));
+        min-height: auto;
+        margin: 12px auto;
+        padding: 24px;
+      }
+
+      .top {
+        grid-template-columns: 1fr 28mm;
+        gap: 16px;
+      }
+
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        max-width: none;
+      }
+    }
+
+    @media screen and (max-width: 720px) {
+      body {
+        padding: 8px 0;
+      }
+
+      .top-actions {
+        width: calc(100vw - 16px);
+        margin-bottom: 6px;
+      }
+
+      .page {
+        width: calc(100vw - 16px);
+        margin: 8px auto;
+        padding: 18px 16px 22px;
+      }
+
+      .top {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-wrap {
+        width: auto;
+        justify-content: flex-start;
+        order: -1;
+      }
+
+      .photo {
+        width: 26mm;
+        height: 26mm;
+      }
+
+      .name {
+        font-size: clamp(24px, 7vw, 30px);
+      }
+
+      .role {
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .summary {
+        font-size: 10pt;
+      }
+
+      .contact {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .contact-item {
+        align-items: flex-start;
+      }
+
+      .item-head,
+      .edu-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+      }
+
+      .item-meta {
+        white-space: normal;
+      }
+
+      ul.clean {
+        margin-left: 16px;
+      }
+
+      .section-title {
+        gap: 6px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .page {
+        width: calc(100vw - 12px);
+        margin: 6px auto;
+        padding: 16px 14px 20px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      }
+
+      .top-actions {
+        width: calc(100vw - 12px);
+      }
+
+      .home-btn {
+        width: 100%;
+      }
+
+      .version-btn {
+        flex: 1 1 0;
+      }
+
+      .name {
+        font-size: 23px;
+      }
+
+      .role {
+        letter-spacing: 0.25px;
+      }
+
+      .section-title {
+        font-size: 10pt;
+      }
+
+      .item-title,
+      .item-sub,
+      .skills-grid,
+      .edu-row {
+        font-size: 9pt;
+      }
+
+      ul.clean li {
+        font-size: 9pt;
+      }
+
+      .badge {
+        font-size: 8pt;
+        padding: 2px 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-actions">
+    <div class="action-row">
+      <a class="home-btn" href="index.html">Back Home</a>
+    </div>
+    <div class="action-row">
+      <a class="version-btn is-active" href="resume.html">V1</a>
+      <a class="version-btn" href="previewresume.html">V2</a>
+    </div>
+  </div>
+  <div class="page">
+    <div class="top">
+      <div>
+        <h1 class="name">Asutosh Pattanayak</h1>
+        <div class="role">AI Automation Engineer | AI Product Builder</div>
+        <p class="summary">
+          AI-focused builder creating multi-agent systems, voice AI agents, content automation pipelines, and practical tools for creators and businesses.
+          Generated $3000+ through freelancing and delivered real-world automation projects with measurable impact.
+        </p>
+        <!-- Font Awesome CDN (add inside <head> if not added) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+        <div class="contact">
+
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:asutoshpattanayak806@gmail.com">
+              asutoshpattanayak806@gmail.com
+            </a>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <a href="tel:+917847041321">
+              +91 7847041321
+            </a>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-globe"></i>
+            <a href="https://asutoosh.me" target="_blank">
+              asutoosh.me
+            </a>
+          </div>
+
+          <div class="contact-item">
+            <i class="fab fa-github"></i>
+            <a href="https://github.com/asutoosh" target="_blank">
+              github.com/asutoosh
+            </a>
+          </div>
+
+          <div class="contact-item">
+            <i class="fab fa-linkedin"></i>
+            <a href="https://linkedin.com/in/asutosh-pattanayak" target="_blank">
+              linkedin.com/in/asutosh-pattanayak
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="photo-wrap">
+        <div class="photo">
+          <img src="assets/profilepic.png" alt="Profile Photo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=&quot;fallback&quot;>AP</div>';" />
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Achievements</div>
+      <ul class="clean">
+        <li>Earned $3000+ through freelancing and independent client work.</li>
+        <li>Built and delivered automation systems for creators, businesses, and AI workflows.</li>
+        <li>Passed the FTMO $5K Trading Challenge.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Projects</div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Multi-Agent AI System (Multiclaw)</div>
+          <div class="item-meta">AI / Automation</div>
+        </div>
+        <p class="item-sub">
+          Built a multi-agent architecture where agents validate and refine each other's outputs before delivery, improving reliability and consistency of generated results.
+        </p>
+        <div class="project-tags">
+          <span class="badge">LLMs</span>
+          <span class="badge">Multi-Agent</span>
+          <span class="badge">Validation</span>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">AI Calling Sales Agent (LiveKit)</div>
+          <div class="item-meta">Voice AI</div>
+        </div>
+        <p class="item-sub">
+          Developed a real-time voice AI agent using LiveKit with latency optimization for automated sales calls and customer interactions.
+        </p>
+        <div class="project-tags">
+          <span class="badge">LiveKit</span>
+          <span class="badge">Voice AI</span>
+          <span class="badge">Real-time</span>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">YouTube Automation System (n8n)</div>
+          <div class="item-meta">Content Automation</div>
+        </div>
+        <p class="item-sub">
+          Built automation pipelines for 3 content creators, reducing manual content production time and enabling streamlined publishing workflows.
+        </p>
+        <div class="project-tags">
+          <span class="badge">n8n</span>
+          <span class="badge">Workflow</span>
+          <span class="badge">Publishing</span>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Automated Blogging System</div>
+          <div class="item-meta">SEO / AI Content</div>
+        </div>
+        <p class="item-sub">
+          Developed a system that detects trending keywords, generates research-backed articles using LLMs, and auto-publishes to WordPress.
+        </p>
+        <div class="project-tags">
+          <span class="badge">SEO</span>
+          <span class="badge">WordPress</span>
+          <span class="badge">LLMs</span>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Forex Trading Indicator System</div>
+          <div class="item-meta">Signals / Telegram</div>
+        </div>
+        <p class="item-sub">
+          Built an EMA-based signal system with Telegram integration for real-time alerts and faster trading decisions.
+        </p>
+        <div class="project-tags">
+          <span class="badge">EMA</span>
+          <span class="badge">Telegram</span>
+          <span class="badge">Alerts</span>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">CRM for PG Marketplace</div>
+          <div class="item-meta">Operations / SaaS</div>
+        </div>
+        <p class="item-sub">
+          Developed a Android app system to manage tenants, listings, and operations for PG owners, streamlining property management tasks.
+        </p>
+        <div class="project-tags">
+          <span class="badge">CRM</span>
+          <span class="badge">Marketplace</span>
+          <span class="badge">Android App</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Experience</div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Freelancer / Independent Builder</div>
+          <div class="item-meta">2024 – Present</div>
+        </div>
+        <ul class="clean">
+          <li>Delivered 5+ websites and automation systems for international clients.</li>
+          <li>Generated over $3000 in freelance revenue through client work and independent projects.</li>
+          <li>Built systems focused on automation, content, and AI workflows.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">AI Voice & Audio Specialist</div>
+          <div class="item-meta">2024 – Present</div>
+        </div>
+        <ul class="clean">
+          <li>Worked with TTS, STT, and voice-cloning tools to build and deploy voice-based AI systems.</li>
+          <li>Integrated voice features into production-ready workflows and tools.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Content Automation Manager (YouTube)</div>
+          <div class="item-meta">2024 – 2025</div>
+        </div>
+        <ul class="clean">
+          <li>Managed automation systems for 3 faceless YouTube channels.</li>
+          <li>Improved content consistency and output through workflow automation.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Freelance Translator (Odia → English)</div>
+          <div class="item-meta">Earlier Work</div>
+        </div>
+        <ul class="clean">
+          <li>Delivered translation services and built early client pipeline for online income.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section two-col">
+      <div>
+        <div class="section-title">Skills</div>
+        <div class="skills-grid">
+          <div class="skill-line"><span class="skill-label">Technical:</span> Python, React, PostgreSQL, Supabase</div>
+          <div class="skill-line"><span class="skill-label">AI & Automation:</span> LLMs, n8n, Whisper, TTS, ComfyUI</div>
+          <div class="skill-line"><span class="skill-label">Tools & Platforms:</span> Azure, DigitalOcean, Cursor</div>
+          <div class="skill-line"><span class="skill-label">Other:</span> SEO, Content Systems, Communication, Design</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Education</div>
+        <div class="edu-row">
+          <div><strong>University of Delhi</strong><br />2024 – 2027</div>
+        </div>
+        <div class="edu-row">
+          <div><strong>Jawahar Navodaya Vidyalaya</strong><br />2016 – 2023</div>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+</body>
+</html>

@@ -6,11 +6,76 @@
   <meta name="color-scheme" content="dark light">
   <title>Builds - Asutosh Pattanayak</title>
   <meta name="description" content="The full story behind everything I've built — from internet hacks to SaaS attempts to real revenue.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 x=%22.1em%22 font-size=%2290%22>🚀</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .page-top-actions {
+      width: min(100% - 2rem, var(--max));
+      margin: 1rem auto 0;
+    }
+
+    .builds-back-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.58rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid color-mix(in oklab, var(--border) 72%, rgba(255, 255, 255, 0.24));
+      background: color-mix(in oklab, var(--surface) 68%, transparent);
+      color: var(--text);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      backdrop-filter: blur(10px) saturate(120%);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .builds-back-btn:hover,
+    .builds-back-btn:focus-visible {
+      background: color-mix(in oklab, var(--surface-soft) 78%, transparent);
+      border-color: color-mix(in oklab, var(--accent) 30%, var(--border));
+    }
+
+    @media (max-width: 680px) {
+      .page-top-actions {
+        width: min(100% - 1rem, var(--max));
+        margin-top: 0.75rem;
+      }
+
+      .builds-back-btn {
+        width: 100%;
+      }
+
+      .hero {
+        padding-top: var(--space-5);
+        gap: var(--space-3);
+      }
+
+      .hero .lead {
+        font-size: var(--text-sm);
+      }
+
+      .story-chapter {
+        padding-bottom: var(--space-5);
+      }
+
+      .story-chapter h3 {
+        font-size: 0.95rem;
+      }
+
+      .story-chapter p {
+        font-size: 0.82rem;
+      }
+
+      .story-outcome {
+        font-size: 0.76rem;
+      }
+    }
+
+  </style>
 </head>
 <body>
   <nav class="bottom-dock" aria-label="Main navigation">
@@ -25,6 +90,10 @@
   </nav>
 
   <main>
+    <div class="page-top-actions">
+      <a href="index.html" class="builds-back-btn">Back Home</a>
+    </div>
+
     <section class="container hero" data-reveal>
       <h1>how i got here</h1>
       <p class="lead">Not a résumé. Just the real sequence — what I hacked, what I built, what failed, and what started making money.</p>

@@ -59,7 +59,8 @@
       background: ${mode === 'light' ? '#ffffff' : '#09090b'};
       border-radius: 50%;
       transform: translate(-50%, -50%) scale(0);
-      transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+      opacity: 0.92;
+      transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease;
     `;
 
     overlay.style.opacity = '1';
@@ -68,18 +69,21 @@
       circle.style.transform = 'translate(-50%, -50%) scale(1)';
     });
 
-    applyTheme(mode);
+    window.setTimeout(() => {
+      applyTheme(mode);
+    }, 120);
 
     setTimeout(() => {
       overlay.style.opacity = '0';
-    }, 280);
+      circle.style.opacity = '0';
+    }, 360);
 
     setTimeout(() => {
       circle.style.transform = 'translate(-50%, -50%) scale(0)';
-    }, 420);
+    }, 520);
   }
 
-  setTheme(saved ?? (prefersLight ? 'light' : 'dark'), false);
+  setTheme(saved ?? 'dark', false);
 
   toggle.addEventListener('click', () => {
     const rect = toggle.getBoundingClientRect();
@@ -148,4 +152,97 @@
 (function setCurrentYear() {
   const yearElement = document.getElementById('year');
   if (yearElement) yearElement.textContent = new Date().getFullYear();
+})();
+
+// =================== NOW BUILDING AUTO CAROUSEL ===================
+(function initNowBuildingCarousel() {
+  const track = document.querySelector('.now-building-grid');
+  if (!track) return;
+
+  const mobileQuery = window.matchMedia('(max-width: 780px)');
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  let rafId = null;
+  let pauseTimeout = null;
+  let direction = 1;
+  let lastTimestamp = 0;
+  let isPaused = false;
+
+  function stopAutoplay() {
+    if (rafId === null) return;
+    window.cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  function canAutoplay() {
+    if (!mobileQuery.matches || reducedMotionQuery.matches || isPaused) return false;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    return maxScroll > 8;
+  }
+
+  function animate(timestamp) {
+    if (!canAutoplay()) {
+      stopAutoplay();
+      return;
+    }
+
+    if (!lastTimestamp) lastTimestamp = timestamp;
+    const delta = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const speed = 0.045;
+    const nextLeft = track.scrollLeft + (delta * speed * direction);
+
+    if (nextLeft >= maxScroll) {
+      track.scrollLeft = maxScroll;
+      direction = -1;
+    } else if (nextLeft <= 0) {
+      track.scrollLeft = 0;
+      direction = 1;
+    } else {
+      track.scrollLeft = nextLeft;
+    }
+
+    rafId = window.requestAnimationFrame(animate);
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    lastTimestamp = 0;
+    if (!canAutoplay()) return;
+    rafId = window.requestAnimationFrame(animate);
+  }
+
+  function pauseAutoplay() {
+    isPaused = true;
+    stopAutoplay();
+    window.clearTimeout(pauseTimeout);
+  }
+
+  function resumeAutoplayWithDelay() {
+    pauseAutoplay();
+    window.clearTimeout(pauseTimeout);
+    pauseTimeout = window.setTimeout(() => {
+      isPaused = false;
+      startAutoplay();
+    }, 1800);
+  }
+
+  track.addEventListener('mouseenter', pauseAutoplay);
+  track.addEventListener('mouseleave', () => {
+    isPaused = false;
+    startAutoplay();
+  });
+  track.addEventListener('touchstart', resumeAutoplayWithDelay, { passive: true });
+  track.addEventListener('touchend', resumeAutoplayWithDelay, { passive: true });
+  track.addEventListener('pointerdown', resumeAutoplayWithDelay);
+  window.addEventListener('resize', startAutoplay);
+
+  if (typeof mobileQuery.addEventListener === 'function') {
+    mobileQuery.addEventListener('change', startAutoplay);
+    reducedMotionQuery.addEventListener('change', startAutoplay);
+  }
+
+  startAutoplay();
 })();

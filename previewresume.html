@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asutosh Pattanayak - Resume</title>
+
+  <!-- Same Inter stack as index.html / styles.css -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --text-strong:#0b0b0b;
+      --text:#171717;
+      --text-soft:#2a2a2a;
+      --muted:#5d5d5d;
+      --light:#868686;
+      --line:#cfcfcf;
+      --bg:#ffffff;
+      --icon-email:#1e3a8a;
+      --icon-phone:#9f1239;
+      --icon-web:#0f766e;
+      --icon-linkedin:#4c1d95;
+      --icon-upwork:#166534;
+      --icon-github:#111827;
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      background:#ececec;
+      font-family:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size:13px;
+      font-weight:400;
+      line-height:1.5;
+      color:var(--text);
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .top-actions{
+      width:min(210mm, calc(100vw - 24px));
+      margin:18px auto 10px;
+      display:grid;
+      gap:8px;
+    }
+
+    .action-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .home-btn,
+    .version-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0.58rem 0.95rem;
+      border-radius:999px;
+      border:1px solid rgba(17, 17, 17, 0.12);
+      background:rgba(255,255,255,0.72);
+      color:#111;
+      text-decoration:none;
+      font-size:0.9rem;
+      font-weight:600;
+      backdrop-filter:blur(10px) saturate(120%);
+      box-shadow:0 10px 24px rgba(0,0,0,0.08);
+    }
+
+    .home-btn:hover,
+    .version-btn:hover{
+      background:rgba(255,255,255,0.9);
+    }
+
+    .version-btn.is-active{
+      background:#111;
+      color:#fff;
+      border-color:#111;
+      box-shadow:0 10px 24px rgba(0,0,0,0.14);
+    }
+
+    .page{
+      width:210mm;
+      min-height:297mm;
+      margin:18px auto;
+      background:var(--bg);
+      padding:18mm 16mm 14mm 16mm;
+    }
+
+    .header{
+      display:grid;
+      grid-template-columns:92px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .photo{
+      width:92px;
+      height:112px;
+      border:1.5px solid #7a7a7a;
+      border-radius:10px;
+      overflow:hidden;
+      background:#efefef;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .top h1{
+      margin:0;
+      font-size:32px;
+      line-height:1.05;
+      font-weight:800;
+      letter-spacing:-0.03em;
+      color:var(--text-strong);
+    }
+
+    .dob{
+      margin-top:4px;
+      font-size:11.5px;
+      color:var(--light);
+      font-weight:500;
+      letter-spacing:0.01em;
+    }
+
+    .contacts{
+      margin-top:8px;
+      font-size:12px;
+      line-height:1.55;
+      font-weight:400;
+      color:var(--text-soft);
+    }
+
+    .contacts .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+
+    .contacts a{
+      color:var(--text);
+      font-weight:600;
+      text-decoration:underline;
+      text-decoration-color:#9a9a9a;
+      text-underline-offset:2px;
+    }
+
+    .contacts a:hover{
+      text-decoration-color:var(--text);
+    }
+
+    .contacts span.sep{
+      color:#999;
+      font-weight:400;
+      user-select:none;
+    }
+
+    .icon{
+      font-size:12px;
+      margin-right:4px;
+      display:inline-block;
+      transform:translateY(0.2px);
+    }
+    .icon-email{ color:var(--icon-email); }
+    .icon-phone{ color:var(--icon-phone); }
+    .icon-web{ color:var(--icon-web); }
+    .icon-linkedin{ color:var(--icon-linkedin); }
+    .icon-upwork{ color:var(--icon-upwork); }
+    .icon-github{ color:var(--icon-github); }
+
+    .links{
+      word-break:break-word;
+    }
+
+    .tagline{
+      margin-top:10px;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:0.02em;
+      color:#212121;
+    }
+
+    .divider{
+      margin:10px 0 12px;
+      border:none;
+      border-top:1px solid var(--line);
+    }
+
+    .summary{
+      font-size:13px;
+      font-weight:400;
+      line-height:1.55;
+      color:var(--text-soft);
+    }
+
+    h2.section-title{
+      margin:0 0 8px 0;
+      padding:0 0 5px 0;
+      border-bottom:1px solid var(--line);
+      font-size:10.5px;
+      line-height:1.2;
+      font-weight:700;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .section{
+      margin-top:12px;
+    }
+
+    .two-col{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:8px;
+      align-items:start;
+    }
+
+    .group{
+      margin-top:2px;
+    }
+
+    .edu-item,
+    .exp-item,
+    .proj-item,
+    .cert-item,
+    .highlight-item{
+      margin-bottom:10px;
+    }
+
+    .item-title{
+      font-size:13.25px;
+      font-weight:700;
+      line-height:1.25;
+      margin:0;
+      color:var(--text);
+    }
+
+    .item-meta{
+      font-size:11.25px;
+      color:var(--muted);
+      margin-top:3px;
+      line-height:1.4;
+      font-weight:500;
+    }
+
+    .bullet{
+      margin:4px 0 0 0;
+      padding-left:0;
+      list-style:none;
+      font-size:12px;
+      font-weight:400;
+      line-height:1.42;
+      color:var(--text-soft);
+    }
+
+    .bullet li{
+      margin:0 0 3px 0;
+      position:relative;
+      padding-left:13px;
+    }
+
+    .bullet li::before{
+      content:"→";
+      position:absolute;
+      left:0;
+      top:0;
+      color:#666;
+      font-weight:600;
+      font-size:11px;
+    }
+
+    .small-note{
+      font-size:11.25px;
+      line-height:1.4;
+      color:var(--muted);
+      margin-top:3px;
+      font-weight:400;
+    }
+
+    .skills{
+      font-size:12px;
+      line-height:1.48;
+      font-weight:400;
+      color:var(--text-soft);
+    }
+
+    .skills .label{
+      font-weight:700;
+      color:var(--text);
+    }
+
+    .skills-row{
+      margin-bottom:6px;
+    }
+
+    .left-col,
+    .right-col{
+      min-width:0;
+    }
+
+    .projects-list .proj-item:last-child,
+    .experience-list .exp-item:last-child,
+    .edu-list .edu-item:last-child,
+    .cert-list .cert-item:last-child,
+    .highlights-list .highlight-item:last-child{
+      margin-bottom:0;
+    }
+
+    .project-name,
+    .experience-name,
+    .cert-name,
+    .highlight-name{
+      font-size:13px;
+      font-weight:700;
+      margin:0;
+      line-height:1.28;
+      color:var(--text);
+    }
+
+    .caption{
+      font-size:11px;
+      font-weight:400;
+      color:#666;
+      margin-top:2px;
+    }
+
+    @media (max-width:720px){
+      .top-actions{
+        width:calc(100vw - 16px);
+        margin:8px auto 6px;
+      }
+      .page{
+        width:100%;
+        max-width:100%;
+        min-height:0;
+        margin:0;
+        padding:14mm 10mm;
+      }
+      .home-btn{
+        width:100%;
+      }
+      .version-btn{
+        flex:1 1 0;
+      }
+      .header{
+        grid-template-columns:80px 1fr;
+        gap:14px;
+      }
+      .photo{
+        width:80px;
+        height:98px;
+      }
+      .top h1{
+        font-size:26px;
+      }
+      .two-col{
+        grid-template-columns:1fr;
+        gap:16px;
+      }
+    }
+
+    @media print{
+      body{
+        background:#fff;
+      }
+      .top-actions{
+        display:none;
+      }
+      .page{
+        margin:0;
+        width:210mm;
+        min-height:297mm;
+        padding:16mm 15mm 13mm 15mm;
+      }
+      a{
+        color:inherit;
+        text-decoration:none;
+      }
+    }
+
+    @page{
+      size:A4;
+      margin:0;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-actions">
+    <div class="action-row">
+      <a class="home-btn" href="index.html">Back Home</a>
+    </div>
+    <div class="action-row">
+      <a class="version-btn" href="resume.html">V1</a>
+      <a class="version-btn is-active" href="previewresume.html">V2</a>
+    </div>
+  </div>
+  <div class="page">
+    <div class="header">
+      <div class="photo" aria-label="Profile photo">
+        <img src="assets/profilepic.png" alt="Asutosh Pattanayak">
+      </div>
+
+      <div class="top">
+        <h1>Asutosh Pattanayak</h1>
+        <div class="dob">📅 12 September 2005</div>
+
+        <div class="contacts">
+          <div class="row">
+            <a href="mailto:asutoshpattanayak806@gmail.com"><span class="icon icon-email">📧</span>asutoshpattanayak806@gmail.com</a>
+            <span class="sep">|</span>
+            <a href="tel:+917847041321"><span class="icon icon-phone">📞</span>+91 7847041321</a>
+          </div>
+          <div class="row links">
+            <a href="https://asutoosh.me/" target="_blank" rel="noopener"><span class="icon icon-web">🌐</span>asutoosh.me</a>
+            <span class="sep">|</span>
+            <a href="https://www.linkedin.com/in/asutosh-pattanayak/" target="_blank" rel="noopener"><span class="icon icon-linkedin">🔗</span>linkedin.com/in/asutosh-pattanayak</a>
+            <span class="sep">|</span>
+            <a href="https://www.upwork.com/freelancers/~018c86a1e163d35ee2" target="_blank" rel="noopener"><span class="icon icon-upwork">🟢</span>Upwork</a>
+            <span class="sep">|</span>
+            <a href="https://github.com/asutoosh" target="_blank" rel="noopener"><span class="icon icon-github">🐙</span>github.com/asutoosh</a>
+          </div>
+        </div>
+
+        <div class="tagline">Freelancer • Trader • Polymath</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <h2 class="section-title">Summary</h2>
+      <div class="summary">
+        Curious builder and fast learner working at the intersection of AI, automation, and digital business.
+        I experiment, ship, fail fast, and iterate faster—whether it’s building SaaS tools, automating content systems, or exploring trading strategies.
+        <br>
+        From freelancing and AI voice tech to launching multiple automation products and marketplaces, I focus on practical execution over theory.
+        <br>
+        Currently building products in AI workflows, PG marketplace systems, and content automation while continuously exploring emerging tech.
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="left-col">
+        <div class="section">
+          <h2 class="section-title">Education</h2>
+
+          <div class="edu-list">
+            <div class="edu-item">
+              <p class="item-title">University of Delhi</p>
+              <div class="item-meta">2024 – 2027 (Currently 2nd Year)</div>
+            </div>
+
+            <div class="edu-item">
+              <p class="item-title">Jawahar Navodaya Vidyalaya (JNV)</p>
+              <div class="item-meta">2016 – 2023</div>
+              <div class="small-note">Selected among top ~80 out of 8000 students from my district for free education</div>
+              <div class="small-note">92% (Class 10) | 83% (Class 12)</div>
+            </div>
+
+            <div class="edu-item">
+              <p class="item-title">Indian Statistical Institute (ISI) Entrance</p>
+              <div class="small-note">AIR 459 (Top ~3%) among ~14,000 candidates</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Experience</h2>
+
+          <div class="experience-list">
+            <div class="exp-item">
+              <p class="item-title">Freelance Translator (Odia → English) — Flipper Series (Agency)</p>
+              <div class="item-meta">Sep 2023 – Oct 2024</div>
+              <ul class="bullet">
+                <li>Began freelancing journey and earned second online income</li>
+              </ul>
+            </div>
+
+            <div class="exp-item">
+              <p class="item-title">AI Voice &amp; Audio Specialist</p>
+              <div class="item-meta">May 2024 – Jan 2025</div>
+              <ul class="bullet">
+                <li>Worked with TTS, STT, and voice cloning tools across multiple platforms</li>
+              </ul>
+            </div>
+
+            <div class="exp-item">
+              <p class="item-title">Content Automation Manager (YouTube, US-based)</p>
+              <ul class="bullet">
+                <li>Managed and optimized automation systems for 3 faceless YouTube channels</li>
+              </ul>
+            </div>
+
+            <div class="exp-item">
+              <p class="item-title">AI Outbound Sales (UK-based Brand)</p>
+              <div class="item-meta">Oct 2024 – Nov 2024</div>
+              <ul class="bullet">
+                <li>Executed AI-assisted outbound campaigns and lead generation</li>
+              </ul>
+            </div>
+
+            <div class="exp-item">
+              <p class="item-title">Independent Builder / Freelancer</p>
+              <ul class="bullet">
+                <li>Delivered 5+ SEO-optimized websites to international clients</li>
+                <li>Built SaaS tools and automation systems for real-world use cases</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Core Skills</h2>
+          <div class="skills">
+            <div class="skills-row"><span class="label">Tech:</span> Python, React, Web Apps, PostgreSQL, Supabase, Azure, DigitalOcean</div>
+            <div class="skills-row"><span class="label">AI Stack:</span> LLMs, TTS, Image Generation, Video Generation, Automation</div>
+            <div class="skills-row"><span class="label">Tools:</span> n8n, ComfyUI, Cursor, Whisper</div>
+            <div class="skills-row"><span class="label">Other:</span> SEO, Content Systems, Communication, Canva Design</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="section">
+          <h2 class="section-title">Projects</h2>
+
+          <div class="projects-list">
+            <div class="proj-item">
+              <p class="project-name">Multiclaw</p>
+              <ul class="bullet">
+                <li>Multi-agent AI architecture where agents validate and review each other’s outputs before final delivery</li>
+              </ul>
+            </div>
+
+            <div class="proj-item">
+              <p class="project-name">AI Calling Sales Agent (LiveKit-based)</p>
+              <ul class="bullet">
+                <li>Built real-time AI voice agents (latency optimization ongoing)</li>
+              </ul>
+            </div>
+
+            <div class="proj-item">
+              <p class="project-name">YouTube Automation System (n8n-based)</p>
+              <ul class="bullet">
+                <li>Built and sold automation workflow to 3 content creators</li>
+              </ul>
+            </div>
+
+            <div class="proj-item">
+              <p class="project-name">Automated Blogging System</p>
+              <ul class="bullet">
+                <li>Detects trending keywords → generates research-backed content → auto-publishes to WordPress</li>
+              </ul>
+            </div>
+
+            <div class="proj-item">
+              <p class="project-name">Website Development (Client Work)</p>
+              <ul class="bullet">
+                <li>Delivered 5+ SEO-optimized websites for global clients</li>
+              </ul>
+            </div>
+
+            <div class="proj-item">
+              <p class="project-name">Forex Trading Indicator (EMA-based)</p>
+              <ul class="bullet">
+                <li>Built signal system with Telegram integration for real-time alerts</li>
+              </ul>
+            </div>
+
+            <div class="proj-item">
+              <p class="project-name">CRM for PG Owners</p>
+              <ul class="bullet">
+                <li>Built workflow system to manage tenants, listings, and operations</li>
+              </ul>
+            </div>
+
+            <div class="proj-item">
+              <p class="project-name">Personal AI Writing App</p>
+              <ul class="bullet">
+                <li>Developed tool for auto rephrasing and translation on mobile</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Certifications</h2>
+          <div class="cert-list">
+            <div class="cert-item">
+              <p class="cert-name">AI Fluency: Framework &amp; Foundations — Anthropic</p>
+            </div>
+            <div class="cert-item">
+              <p class="cert-name">FTMO Trader — Passed $5K Challenge</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Quick Highlights</h2>
+          <div class="highlights-list">
+            <div class="highlight-item">
+              <ul class="bullet">
+                <li>Earned $3000+ through freelancing</li>
+              </ul>
+            </div>
+            <div class="highlight-item">
+              <ul class="bullet">
+                <li>Built and sold automation workflows</li>
+              </ul>
+            </div>
+            <div class="highlight-item">
+              <ul class="bullet">
+                <li>Hands-on experience across AI models (LLMs, TTS, image, video, audio)</li>
+              </ul>
+            </div>
+            <div class="highlight-item">
+              <ul class="bullet">
+                <li>Experience in trading, crypto, and on-chain analysis</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
